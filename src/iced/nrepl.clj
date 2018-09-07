@@ -1,14 +1,10 @@
 (ns iced.nrepl
-  (:require ;;[iced.cider :as cider]
-            [iced.nrepl
+  (:require [iced.nrepl
              [core :as core]
              [format :as format]
              [grimoire :as grimoire]
              [lint :as lint]
-             [namespace :as namespace]]
-            [refactor-nrepl.middleware :as r.middleware]
-            ;;[cider.piggieback :as c.piggieback]
-            ))
+             [namespace :as namespace]]))
 
 (when-not (resolve 'set-descriptor!)
   (if (find-ns 'clojure.tools.nrepl)
@@ -59,12 +55,6 @@
       (let [res (merge {:status :done} (f msg))]
         (transport/send transport (response-for msg res)))
       (handler msg))))
-
-; (def wrap-iced
-;   (comp wrap-iced*
-;         cider/supported-handler
-;         r.middleware/wrap-refactor
-;         c.piggieback/wrap-cljs-repl))
 
 (set-descriptor!
  #'wrap-iced
