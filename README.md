@@ -4,6 +4,7 @@
 
 [![Dependencies Status](https://versions.deps.co/liquidz/iced-nrepl/status.svg)](https://versions.deps.co/liquidz/iced-nrepl)
 [![CircleCI](https://circleci.com/gh/liquidz/iced-nrepl.svg?style=svg)](https://circleci.com/gh/liquidz/iced-nrepl)
+[![Clojars Project](https://img.shields.io/clojars/v/iced-nrepl.svg)](https://clojars.org/iced-nrepl)
 
 ## License
 
