@@ -20,12 +20,12 @@
 (defn- version-reply [_]
    {:version (core/version)})
 
-(defn- lint-ns-reply [msg]
-  (let [{ns-name :ns linters :linters} msg]
+(defn- lint-file-reply [msg]
+  (let [{:keys [file linters]} msg]
     (try
-      (let [res (lint/lint-by-eastwood (symbol ns-name) linters)]
+      (let [res (lint/lint-file file linters)]
         {:lint-warnings res})
-      (catch Exception ex
+      (catch Throwable ex
         {:lint-warnings [] :error (.getMessage ex)}))))
 
 (defn- grimoire-reply [msg]
@@ -44,7 +44,7 @@
 
 (def iced-nrepl-ops
   {"iced-version" version-reply
-   "lint-ns" lint-ns-reply
+   "lint-file" lint-file-reply
    "grimoire" grimoire-reply
    "project-namespaces" project-namespaces-reply
    "format-code-with-indents" format-code-with-indents-reply})
