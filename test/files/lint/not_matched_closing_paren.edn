@@ -1,0 +1,9 @@
+(ns foo.core)
+
+(defn hello [msg]
+  (println "hello" msg))
+  ;; unmatched closing paren
+  )
+
+(defn world [msg]
+  (println "world" msg))

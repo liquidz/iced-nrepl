@@ -1,0 +1,9 @@
+(ns foo.core)
+
+(defn hello [msg]
+  ;; not closing println
+  (println "hello" msg
+  )
+
+(defn world [msg]
+  (println "world" msg))
