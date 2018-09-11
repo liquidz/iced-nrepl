@@ -1,6 +1,7 @@
 (ns iced.nrepl
   (:require [iced.nrepl
              [core :as core]
+             [everywhere :as everywhere]
              [format :as format]
              [grimoire :as grimoire]
              [lint :as lint]
@@ -42,18 +43,27 @@
   (let [{:keys [code indents]} msg]
     {:formatted (format/code code indents)}))
 
+(defn- everywhere-reply [msg]
+  (let [{:keys [transport file]} msg
+        candidates (everywhere/candidates file)]
+    (doseq [ls (partition-all 50 candidates)]
+      (transport/send transport (response-for msg {:candidates ls})))
+    (transport/send transport (response-for msg {:status :done})))
+  nil)
+
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "lint-file" lint-file-reply
    "grimoire" grimoire-reply
    "project-namespaces" project-namespaces-reply
-   "format-code-with-indents" format-code-with-indents-reply})
+   "format-code-with-indents" format-code-with-indents-reply
+   "everywhere" everywhere-reply})
 
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
     (if-let [f (get iced-nrepl-ops op)]
-      (let [res (merge {:status :done} (f msg))]
-        (transport/send transport (response-for msg res)))
+      (when-let [res (f msg)]
+        (transport/send transport (response-for msg (merge {:status :done} res))))
       (handler msg))))
 
 (set-descriptor!
