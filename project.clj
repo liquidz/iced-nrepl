@@ -8,6 +8,7 @@
                  [clj-http "3.9.1"]
                  [cljfmt "0.6.0" :exclusions [org.clojure/tools.reader]]
                  [jonase/eastwood "0.2.9" :exclusions [org.clojure/clojure]]
+                 [medley "1.0.0"]
                  [nrepl "0.4.5"]]
   :profiles
   {:dev
