@@ -1,0 +1,56 @@
+= iced nREPL
+
+https://github.com/nrepl/nREPL[nREPL] middleware to support https://github.com/liquidz/vim-iced[vim-iced].
+
+image:https://versions.deps.co/liquidz/iced-nrepl/status.svg["Dependencies Status", link="https://versions.deps.co/liquidz/iced-nrepl"]
+image:https://circleci.com/gh/liquidz/iced-nrepl.svg?style=svg["CircleCI", link="https://circleci.com/gh/liquidz/iced-nrepl"]
+image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="https://clojars.org/iced-nrepl"]
+
+== Ops
+
+|===
+| Op name | Required | Optional | Return
+
+| iced-version
+|
+|
+| `:version`
+
+| lint-file
+| `:file`,`:linters`
+|
+| `:lint-warnings`, `:error` (if occured)
+
+| grimoire
+| `:platform`, `:ns`, `:symbol`
+|
+| `:content`, `:http-status` (if errored)
+
+| system-info
+|
+|
+| `:user-dir`, `:file-separator`, `:project-name`
+
+| project-namespaces
+|
+| `:prefix`
+| `:namespaces`
+
+| project-functions
+|
+| `:prefix`
+| `:functions`
+
+| format-code-with-indents,
+| `:code`, `:indents`
+|
+| `:formatted`
+
+|===
+
+== License
+
+Copyright © 2018 https://twitter.com/uochan[Masashi Iizuka]
+
+Distributed under the Eclipse Public License either version 1.0 or (at
+your option) any later version.
