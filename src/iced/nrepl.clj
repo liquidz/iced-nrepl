@@ -49,7 +49,7 @@
 
 (defn- format-code-with-indents-reply [msg]
   (let [{:keys [code indents]} msg]
-    {:formatted (format/code code indents)}))
+    (format/code code indents)))
 
 (defn- project-functions-reply [msg]
   (let [{:keys [transport prefix]} msg

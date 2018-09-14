@@ -15,8 +15,16 @@
 (def ^:private gen-option
   (memoize gen-option*))
 
+(defn- parse-error-message [s]
+  (if-let [[[_ line column]] (re-seq #"at line (\d+), column (\d+)" s)]
+    {:error s :line (Long/parseLong line) :column (Long/parseLong column)}
+    {:error s}))
+
 (defn code [code-str indents]
   (let [option (gen-option indents)]
-    (fmt/reformat-string code-str option)))
+    (try
+      {:formatted (fmt/reformat-string code-str option)}
+      (catch Exception ex
+        (parse-error-message (.getMessage ex))))))
 
 
