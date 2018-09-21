@@ -6,7 +6,8 @@
              [grimoire :as grimoire]
              [lint :as lint]
              [namespace :as namespace]
-             [system :as system]]))
+             [system :as system]]
+            [iced.nrepl.refactor.thread :as refactor.thread]))
 
 (when-not (resolve 'set-descriptor!)
   (if (find-ns 'clojure.tools.nrepl)
@@ -59,6 +60,18 @@
     (transport/send transport (response-for msg {:status :done})))
   nil)
 
+(defn- refactor-thread-first-reply [msg]
+  (try
+    {:code (refactor.thread/thread-first (:code msg))}
+    (catch Exception ex
+      {:status #{:done :failed} :error (.getMessage ex)})))
+
+(defn- refactor-thread-last-reply [msg]
+  (try
+    {:code (refactor.thread/thread-last (:code msg))}
+    (catch Exception ex
+      {:status #{:done :failed} :error (.getMessage ex)})))
+
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "lint-file" lint-file-reply
@@ -66,7 +79,9 @@
    "system-info" (fn [_msg] (system/info))
    "project-namespaces" project-namespaces-reply
    "project-functions" project-functions-reply
-   "format-code-with-indents" format-code-with-indents-reply })
+   "format-code-with-indents" format-code-with-indents-reply
+   "refactor-thread-first" refactor-thread-first-reply
+   "refactor-thread-last" refactor-thread-last-reply})
 
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
