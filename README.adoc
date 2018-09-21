@@ -41,10 +41,20 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:prefix`
 | `:functions`
 
-| format-code-with-indents,
+| format-code-with-indents
 | `:code`, `:indents`
 |
 | `:formatted`
+
+| refactor-thread-first
+| `:code`
+|
+| `:code`, `:error` (if occured)
+
+| refactor-thread-last
+| `:code`
+|
+| `:code`, `:error` (if occured)
 
 |===
 
