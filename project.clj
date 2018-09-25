@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [cider/orchard "0.3.1"]
                  [clj-http "3.9.1"]
-                 [cljfmt "0.6.1" :exclusions [org.clojure/tools.reader]]
+                 [cljfmt "0.6.1" :exclusions [org.clojure/tools.reader
+                                              org.clojure/clojurescript]]
                  [jonase/eastwood "0.2.9" :exclusions [org.clojure/clojure]]
                  [medley "1.0.0"]
                  [nrepl "0.4.5"]]

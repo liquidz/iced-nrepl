@@ -11,5 +11,6 @@
     'foo.bar "(ns\nfoo.bar\n(:require bar.baz))"
     'foo.bar "(ns\n  foo.bar\n(:require bar.baz))"
     'foo.bar-baz "(ns foo.bar-baz)"
+    'foo2bar.baz "(ns foo2bar.baz)"
     nil ""
     nil "(def foo 1)"))
