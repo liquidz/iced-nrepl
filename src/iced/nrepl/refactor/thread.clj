@@ -1,4 +1,5 @@
-(ns iced.nrepl.refactor.thread)
+(ns iced.nrepl.refactor.thread
+  (:require [clojure.string :as str]))
 
 (defmulti expand-sexp (fn [sym _] sym))
 
@@ -33,7 +34,9 @@
   (let [sexp (read-string code)
         expanded (expand-sexp sym sexp)]
     (if (> (count expanded) 2)
-      (str (construct sym expanded))
+      (-> (construct sym expanded)
+          str
+          (str/replace "," ""))
       code)))
 
 (def thread-first (partial thread* '->))
