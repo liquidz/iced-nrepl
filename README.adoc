@@ -8,53 +8,70 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 
 == Ops
 
+[cols="4*,a"]
 |===
-| Op name | Required | Optional | Return
+| Op name | Required | Optional | Return | Note
 
 | iced-version
 |
 |
 | `:version`
+|
 
 | lint-file
-| `:file`,`:linters`
+| `:file`, `:env`, `:linters`
 |
 | `:lint-warnings`, `:error` (if occured)
+| `:env` must be "clj" or "cljs"
 
 | grimoire
 | `:platform`, `:ns`, `:symbol`
 |
 | `:content`, `:http-status` (if errored)
+|
 
 | system-info
 |
 |
 | `:user-dir`, `:file-separator`, `:project-name`
+|
 
 | project-namespaces
 |
 | `:prefix`
 | `:namespaces`
+|
 
 | project-functions
 |
 | `:prefix`
 | `:functions`
+|
+
+| ns-aliases
+| `:env`, `:code`
+|
+| `:aliases`
+| `:env` must be "clj" or "cljs" +
+`:code` is `ns` form code
 
 | format-code-with-indents
 | `:code`, `:indents`
 |
 | `:formatted`
+|
 
 | refactor-thread-first
 | `:code`
 |
 | `:code`, `:error` (if occured)
+|
 
 | refactor-thread-last
 | `:code`
 |
 | `:code`, `:error` (if occured)
+|
 
 |===
 
