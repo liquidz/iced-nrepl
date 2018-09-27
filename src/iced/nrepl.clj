@@ -64,6 +64,10 @@
     (transport/send transport (response-for msg {:status :done})))
   nil)
 
+(defn- ns-aliases-reply [msg]
+  (let [{:keys [env code]} msg]
+    {:aliases (namespace/aliases env code)}))
+
 (defn- refactor-thread-first-reply [msg]
   (try
     {:code (refactor.thread/thread-first (:code msg))}
@@ -83,6 +87,7 @@
    "system-info" (fn [_msg] (system/info))
    "project-namespaces" project-namespaces-reply
    "project-functions" project-functions-reply
+   "ns-aliases" ns-aliases-reply
    "format-code-with-indents" format-code-with-indents-reply
    "refactor-thread-first" refactor-thread-first-reply
    "refactor-thread-last" refactor-thread-last-reply})
