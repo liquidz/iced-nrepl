@@ -10,13 +10,11 @@
                                               org.clojure/clojurescript]]
                  [jonase/eastwood "0.2.9" :exclusions [org.clojure/clojure]]
                  [medley "1.0.0"]
-                 [nrepl "0.4.5"]]
+                 [nrepl "0.4.5"]
+                 [refactor-nrepl "2.4.0"]]
   :profiles
   {:dev
-   {:dependencies [[cider/cider-nrepl "0.18.0"]
-                   [fudje "0.9.7"]
-                   [leiningen-core "2.8.1"]
-                   [refactor-nrepl "2.4.0"]]}}
+   {:dependencies [[fudje "0.9.7"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
