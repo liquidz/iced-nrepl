@@ -17,11 +17,15 @@
 (defmulti aliases (fn [env _] env))
 (defmethod aliases "clj"
   [_ ns-code]
-  (->> ns-code i.u.ns/extract-ns-sym ns-aliases
-       (medley/map-vals ns-name)
-       ensure-string-map))
+  (or (some->> ns-code i.u.ns/extract-ns-sym ns-aliases
+               (medley/map-vals ns-name)
+               ensure-string-map)
+      {}))
 
 (defmethod aliases "cljs"
   [_ ns-code]
-  (-> ns-code read-string r.ns.parser/get-libspecs r.ns.parser/aliases
-      ensure-string-map))
+  (or (when (seq ns-code)
+        (some-> ns-code read-string r.ns.parser/get-libspecs
+                r.ns.parser/aliases
+                ensure-string-map))
+      {}))

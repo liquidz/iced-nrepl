@@ -22,6 +22,18 @@
               "sut" "iced.nrepl.namespace"}
              (sut/aliases "clj" "(ns iced.nrepl.namespace-test)"))))
 
+  (t/testing "clj with no ns form"
+    (t/is (= {}  (sut/aliases "clj" "(list 1 2 3)"))))
+
+  (t/testing "clj with no ns form"
+    (t/is (= {}  (sut/aliases "clj" ""))))
+
   (t/testing "cljs"
     (t/is (= {"bar" "foo.bar"}
-             (sut/aliases "cljs" "(ns foo.core (:require [foo.bar :as bar]))")))))
+             (sut/aliases "cljs" "(ns foo.core (:require [foo.bar :as bar]))"))))
+
+  (t/testing "cljs with no ns form"
+    (t/is (= {}  (sut/aliases "cljs" "(list 1 2 3)"))))
+
+  (t/testing "cljs with no ns form"
+    (t/is (= {}  (sut/aliases "cljs" "")))))
