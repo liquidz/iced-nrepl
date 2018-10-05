@@ -3,7 +3,7 @@
               [medley.core :as medley]))
 
 (def ^:private indentation-rules
-  (atom nil))
+  (atom fmt/default-indents))
 
 (defn- keyword->string [kw]
   (subs (str kw) 1))
