@@ -71,7 +71,10 @@
 
 (defn- ns-aliases-reply [msg]
   (let [{:keys [env code]} msg]
-    {:aliases (namespace/aliases env code)}))
+    (try
+      {:aliases (namespace/aliases env code)}
+      (catch Exception ex
+        {:aliases {} :error (.getMessage ex)}))))
 
 (defn- refactor-thread-first-reply [msg]
   (try
