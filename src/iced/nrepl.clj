@@ -52,9 +52,14 @@
     (transport/send transport (response-for msg {:status :done})))
   nil)
 
+(defn- set-indentation-rules-reply [msg]
+  (let [{:keys [rules]} msg]
+    (format/set-indentation-rules! rules)
+    {:status #{:done}}))
+
 (defn- format-code-with-indents-reply [msg]
-  (let [{:keys [code indents]} msg]
-    (format/code code indents)))
+  (let [{:keys [code alias-map]} msg]
+    (format/code code alias-map)))
 
 (defn- project-functions-reply [msg]
   (let [{:keys [transport prefix]} msg
@@ -88,6 +93,7 @@
    "project-namespaces" project-namespaces-reply
    "project-functions" project-functions-reply
    "ns-aliases" ns-aliases-reply
+   "set-indentation-rules" set-indentation-rules-reply
    "format-code-with-indents" format-code-with-indents-reply
    "refactor-thread-first" refactor-thread-first-reply
    "refactor-thread-last" refactor-thread-last-reply})
