@@ -20,7 +20,8 @@
   (t/testing "clj"
     (t/is (= {"t" "clojure.test"
               "fj" "fudje.sweet"
-              "sut" "iced.nrepl.namespace"}
+              "sut" "iced.nrepl.namespace"
+              "o.ns" "orchard.namespace"}
              (sut/aliases "clj" "(ns iced.nrepl.namespace-test)"))))
 
   (t/testing "clj with no ns form"
