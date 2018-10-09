@@ -52,6 +52,14 @@
     (transport/send transport (response-for msg {:status :done})))
   nil)
 
+(defn- related-namespaces-reply [msg]
+  (let [{:keys [transport ns]} msg
+        result (namespace/related-namespaces ns)]
+    (doseq [ls (partition-all send-list-limit result)]
+      (transport/send transport (response-for msg {:related-namespaces ls})))
+    (transport/send transport (response-for msg {:status :done})))
+  nil)
+
 (defn- set-indentation-rules-reply [msg]
   (let [{:keys [rules]} msg]
     (format/set-indentation-rules! rules)
@@ -94,6 +102,7 @@
    "grimoire" grimoire-reply
    "system-info" (fn [_msg] (system/info))
    "project-namespaces" project-namespaces-reply
+   "related-namespaces" related-namespaces-reply
    "project-functions" project-functions-reply
    "ns-aliases" ns-aliases-reply
    "set-indentation-rules" set-indentation-rules-reply
