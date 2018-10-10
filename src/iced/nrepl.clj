@@ -6,6 +6,7 @@
              [grimoire :as grimoire]
              [lint :as lint]
              [namespace :as namespace]
+             [spec :as spec]
              [system :as system]]
             [iced.nrepl.refactor.thread :as refactor.thread]))
 
@@ -96,6 +97,10 @@
     (catch Exception ex
       {:status #{:done :failed} :error (.getMessage ex)})))
 
+(defn- spec-check-reply [msg]
+  (let [{sym :symbol num-tests :num-tests} msg]
+    (spec/check (symbol sym) num-tests)))
+
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "lint-file" lint-file-reply
@@ -108,7 +113,8 @@
    "set-indentation-rules" set-indentation-rules-reply
    "format-code-with-indents" format-code-with-indents-reply
    "refactor-thread-first" refactor-thread-first-reply
-   "refactor-thread-last" refactor-thread-last-reply})
+   "refactor-thread-last" refactor-thread-last-reply
+   "spec-check" spec-check-reply})
 
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
