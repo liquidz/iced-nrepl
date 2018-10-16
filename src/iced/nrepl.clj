@@ -9,16 +9,19 @@
              [system :as system]]
             [iced.nrepl.refactor.thread :as refactor.thread]))
 
-(when-not (resolve 'set-descriptor!)
-  (if (find-ns 'clojure.tools.nrepl)
+(if (find-ns 'clojure.tools.nrepl)
+  (do
     (require
      '[clojure.tools.nrepl.middleware :refer [set-descriptor!]]
      '[clojure.tools.nrepl.misc :refer [response-for]]
      '[clojure.tools.nrepl.transport :as transport])
+    (import 'clojure.tools.nrepl.transport.Transport))
+  (do
     (require
      '[nrepl.middleware :refer [set-descriptor!]]
      '[nrepl.misc :refer [response-for]]
-     '[nrepl.transport :as transport])))
+     '[nrepl.transport :as transport])
+    (import 'nrepl.transport.Transport)))
 
 (def ^:private send-list-limit 50)
 
@@ -106,15 +109,36 @@
    "refactor-thread-last" refactor-thread-last-reply
    "spec-check" spec-check-reply})
 
+(defn read-value-reply
+  [{:keys [transport] :as msg} response]
+  (let [value-str (:value response)
+        x (try (read-string value-str) (catch Exception ex ex))]
+    (transport/send transport (response-for msg (if (instance? Exception x)
+                                                  {:read_error (.getMessage x)}
+                                                  {:read_value x})))))
+
+(defn read-value-transport
+  [{:keys [^Transport transport] :as msg}]
+  (reify Transport
+    (recv [this] (.recv transport))
+    (recv [this timeout] (.recv transport timeout))
+    (send [this response]
+      (when (contains? response :value)
+        (read-value-reply msg response))
+      (.send transport response))))
+
 (defn wrap-iced [handler]
-  (fn [{:keys [op transport] :as msg}]
+  (fn [{:keys [op read-value transport] :as msg}]
     (if-let [f (get iced-nrepl-ops op)]
       (when-let [res (f msg)]
         (transport/send transport (response-for msg (merge {:status :done} res))))
-      (handler msg))))
+      (handler (if (and read-value (= "eval" op))
+                 (assoc msg :transport (read-value-transport msg))
+                 msg)))))
 
-(set-descriptor!
- #'wrap-iced
- {:requires #{}
-  :expects #{}
-  :handles (zipmap (keys iced-nrepl-ops) (repeat {:doc "See README" :requires {} :returns {}}))})
+(when (resolve 'set-descriptor!)
+  (set-descriptor!
+   #'wrap-iced
+   {:requires #{}
+    :expects #{}
+    :handles (zipmap (keys iced-nrepl-ops) (repeat {:doc "See README" :requires {} :returns {}}))}))
