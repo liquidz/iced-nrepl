@@ -2,7 +2,6 @@
   (:require [iced.nrepl
              [core :as core]
              [format :as format]
-             [function :as function]
              [grimoire :as grimoire]
              [lint :as lint]
              [namespace :as namespace]
@@ -70,14 +69,6 @@
   (let [{:keys [code alias-map]} msg]
     (format/code code alias-map)))
 
-(defn- project-functions-reply [msg]
-  (let [{:keys [transport prefix]} msg
-        result (function/project-functions prefix)]
-    (doseq [ls (partition-all send-list-limit result)]
-      (transport/send transport (response-for msg {:functions ls})))
-    (transport/send transport (response-for msg {:status :done})))
-  nil)
-
 (defn- ns-aliases-reply [msg]
   (let [{:keys [env code]} msg]
     (try
@@ -108,7 +99,6 @@
    "system-info" (fn [_msg] (system/info))
    "project-namespaces" project-namespaces-reply
    "related-namespaces" related-namespaces-reply
-   "project-functions" project-functions-reply
    "ns-aliases" ns-aliases-reply
    "set-indentation-rules" set-indentation-rules-reply
    "format-code-with-indents" format-code-with-indents-reply

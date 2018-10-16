@@ -48,12 +48,6 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:related-namespaces`
 |
 
-| project-functions
-|
-| `:prefix`
-| `:functions`
-|
-
 | ns-aliases
 | `:env`, `:code`
 |
