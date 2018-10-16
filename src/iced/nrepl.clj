@@ -5,8 +5,7 @@
              [grimoire :as grimoire]
              [lint :as lint]
              [namespace :as namespace]
-             [spec :as spec]
-             [system :as system]]
+             [spec :as spec]]
             [iced.nrepl.refactor.thread :as refactor.thread]))
 
 (if (find-ns 'clojure.tools.nrepl)
@@ -91,7 +90,6 @@
   {"iced-version" version-reply
    "lint-file" lint-file-reply
    "grimoire" grimoire-reply
-   "system-info" (fn [_msg] (system/info))
    "related-namespaces" related-namespaces-reply
    "ns-aliases" ns-aliases-reply
    "set-indentation-rules" set-indentation-rules-reply
