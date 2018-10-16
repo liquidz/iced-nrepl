@@ -47,14 +47,6 @@
       {:content (:body res)}
       {:status #{:done :failed} :http-status (:status res)})))
 
-(defn- project-namespaces-reply [msg]
-  (let [{:keys [transport prefix]} msg
-        result (namespace/project-namespaces prefix)]
-    (doseq [ls (partition-all send-list-limit result)]
-      (transport/send transport (response-for msg {:namespaces ls})))
-    (transport/send transport (response-for msg {:status :done})))
-  nil)
-
 (defn- related-namespaces-reply [msg]
   (let [{:keys [transport ns]} msg
         result (namespace/related-namespaces ns)]
@@ -100,7 +92,6 @@
    "lint-file" lint-file-reply
    "grimoire" grimoire-reply
    "system-info" (fn [_msg] (system/info))
-   "project-namespaces" project-namespaces-reply
    "related-namespaces" related-namespaces-reply
    "ns-aliases" ns-aliases-reply
    "set-indentation-rules" set-indentation-rules-reply

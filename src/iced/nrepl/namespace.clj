@@ -5,13 +5,6 @@
             [orchard.namespace :as o.ns]
             [refactor-nrepl.ns.ns-parser :as r.ns.parser]))
 
-(defn project-namespaces [& [prefix]]
-  (let [ls (-> (o.ns/project-namespaces)
-               sort
-               distinct)]
-    (cond->> ls
-      prefix (filter #(.startsWith (str %) prefix)))))
-
 (defn- ensure-string-map [m]
   (medley/map-kv (fn [k v] [(str k) (str v)]) m))
 
