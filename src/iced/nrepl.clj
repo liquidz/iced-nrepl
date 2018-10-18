@@ -1,5 +1,6 @@
 (ns iced.nrepl
-  (:require [iced.nrepl
+  (:require [clojure.data.json :as json]
+            [iced.nrepl
              [core :as core]
              [format :as format]
              [grimoire :as grimoire]
@@ -98,31 +99,31 @@
    "refactor-thread-last" refactor-thread-last-reply
    "spec-check" spec-check-reply})
 
-(defn read-value-reply
+(defn json-value-reply
   [{:keys [transport] :as msg} response]
-  (let [value-str (:value response)
-        x (try (read-string value-str) (catch Exception ex ex))]
-    (transport/send transport (response-for msg (if (instance? Exception x)
-                                                  {:read_error (.getMessage x)}
-                                                  {:read_value x})))))
+  (let [data (try (json/write-str (:value response))
+                  (catch Exception ex ex))]
+    (transport/send transport (response-for msg (if (instance? Exception data)
+                                                  {:json_error (.getMessage data)}
+                                                  {:json data})))))
 
-(defn read-value-transport
+(defn json-value-transport
   [{:keys [^Transport transport] :as msg}]
   (reify Transport
     (recv [this] (.recv transport))
     (recv [this timeout] (.recv transport timeout))
     (send [this response]
       (when (contains? response :value)
-        (read-value-reply msg response))
-      (.send transport response))))
+        (json-value-reply msg response))
+      (.send transport (dissoc response :value)))))
 
 (defn wrap-iced [handler]
-  (fn [{:keys [op read-value transport] :as msg}]
+  (fn [{:keys [op transport] :as msg}]
     (if-let [f (get iced-nrepl-ops op)]
       (when-let [res (f msg)]
         (transport/send transport (response-for msg (merge {:status :done} res))))
-      (handler (if (and read-value (= "eval" op))
-                 (assoc msg :transport (read-value-transport msg))
+      (handler (if (and (:json msg) (= "eval" op))
+                 (assoc msg :transport (json-value-transport msg))
                  msg)))))
 
 (when (resolve 'set-descriptor!)
