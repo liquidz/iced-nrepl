@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.json "0.2.6"]
                  [org.clojure/test.check "0.10.0-alpha3"]
-                 [cider/orchard "0.3.2"]
+                 [cider/orchard "0.3.3"]
                  [clj-http "3.9.1"]
                  [cljfmt "0.6.1" :exclusions [org.clojure/tools.reader
                                               org.clojure/clojurescript]]
