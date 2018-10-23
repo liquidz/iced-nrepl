@@ -1,13 +1,12 @@
 (ns iced.nrepl
   (:require [clojure.data.json :as json]
-            [iced.nrepl
-             [core :as core]
-             [format :as format]
-             [grimoire :as grimoire]
-             [lint :as lint]
-             [namespace :as namespace]
-             [spec :as spec]]
-            [iced.nrepl.refactor.thread :as refactor.thread]))
+            [iced.nrepl.core :as core]
+            [iced.nrepl.format :as format]
+            [iced.nrepl.grimoire :as grimoire]
+            [iced.nrepl.lint :as lint]
+            [iced.nrepl.namespace :as namespace]
+            [iced.nrepl.refactor.thread :as refactor.thread]
+            [iced.nrepl.spec :as spec]))
 
 (if (find-ns 'clojure.tools.nrepl)
   (do

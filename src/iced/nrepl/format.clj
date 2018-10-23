@@ -1,6 +1,6 @@
 (ns iced.nrepl.format
-    (:require [cljfmt.core :as fmt]
-              [medley.core :as medley]))
+  (:require [cljfmt.core :as fmt]
+            [medley.core :as medley]))
 
 (def ^:private indentation-rules
   (atom fmt/default-indents))

@@ -1,10 +1,8 @@
 (ns iced.nrepl.lint-test
-  (:require [clojure
-             [string :as str]
-             [test :as t]]
-            [clojure.java
-             [io :as io]
-             [shell :as shell]]
+  (:require [clojure.java.io :as io]
+            [clojure.java.shell :as shell]
+            [clojure.string :as str]
+            [clojure.test :as t]
             [eastwood.lint :as el]
             [fudje.sweet :as fj]
             [iced.nrepl.lint :as sut]))
