@@ -19,10 +19,11 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 |
 
 | iced-lint-file
-| `:file`, `:env`, `:linters`
+| `:file`, `:env`, `:opt`
 |
 | `:lint-warnings`, `:error` (if occured)
-| `:env` must be "clj" or "cljs"
+| `:env` must be "clj" or "cljs" +
+`:opt` is a option map for https://github.com/jonase/eastwood#usage[jonase/eastwood] such as `:linters`, `:exclute-linters` and so on.
 
 | iced-grimoire
 | `:platform`, `:ns`, `:symbol`
