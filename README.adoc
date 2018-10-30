@@ -18,56 +18,56 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:version`
 |
 
-| lint-file
+| iced-lint-file
 | `:file`, `:env`, `:linters`
 |
 | `:lint-warnings`, `:error` (if occured)
 | `:env` must be "clj" or "cljs"
 
-| grimoire
+| iced-grimoire
 | `:platform`, `:ns`, `:symbol`
 |
 | `:content`, `:http-status` (if errored)
 |
 
-| related-namespaces
+| iced-related-namespaces
 |
 | `:ns`
 | `:related-namespaces`
 |
 
-| ns-aliases
+| iced-ns-aliases
 | `:env`, `:code`
 |
 | `:aliases`, `:error` (if occured)
 | `:env` must be "clj" or "cljs" +
 `:code` is `ns` form code
 
-| set-indentation-rules
+| iced-set-indentation-rules
 | `:rules`
 |
 |
 | default indentation rule is `cljfmt.core/default-indents`
 
-| format-code-with-indents
+| iced-format-code-with-indents
 | `:code`, `:alias-map`
 |
 | `:formatted`
 |
 
-| refactor-thread-first
+| iced-refactor-thread-first
 | `:code`
 |
 | `:code`, `:error` (if occured)
 |
 
-| refactor-thread-last
+| iced-refactor-thread-last
 | `:code`
 |
 | `:code`, `:error` (if occured)
 |
 
-| spec-check
+| iced-spec-check
 | `:symbol`, `:num-tests`
 |
 | `:result`, `:num-tests`, `:message` (if errored), `:fail` (if errored)

@@ -88,15 +88,15 @@
 
 (def iced-nrepl-ops
   {"iced-version" version-reply
-   "lint-file" lint-file-reply
-   "grimoire" grimoire-reply
-   "related-namespaces" related-namespaces-reply
-   "ns-aliases" ns-aliases-reply
-   "set-indentation-rules" set-indentation-rules-reply
-   "format-code-with-indents" format-code-with-indents-reply
-   "refactor-thread-first" refactor-thread-first-reply
-   "refactor-thread-last" refactor-thread-last-reply
-   "spec-check" spec-check-reply})
+   "iced-lint-file" lint-file-reply
+   "iced-grimoire" grimoire-reply
+   "iced-related-namespaces" related-namespaces-reply
+   "iced-ns-aliases" ns-aliases-reply
+   "iced-set-indentation-rules" set-indentation-rules-reply
+   "iced-format-code-with-indents" format-code-with-indents-reply
+   "iced-refactor-thread-first" refactor-thread-first-reply
+   "iced-refactor-thread-last" refactor-thread-last-reply
+   "iced-spec-check" spec-check-reply})
 
 (defn json-value-reply
   [{:keys [transport] :as msg} response]
