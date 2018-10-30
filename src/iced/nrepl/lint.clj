@@ -32,11 +32,13 @@
          (remove nil?)
          (map #(assoc % :path file-path)))))
 
-(defn lint-by-eastwood [ns-sym linters]
-  (let [linters (when (sequential? linters)
-                  (map keyword linters))
+(defn lint-by-eastwood [ns-sym opt]
+  (let [{:keys [linters exclude-linters]} opt
+        linters (when (sequential? linters) (map keyword linters))
+        exclude-linters (when (sequential? exclude-linters) (map keyword exclude-linters))
         opt (cond-> {:namespaces [ns-sym]}
-              (seq linters) (assoc :linters linters))]
+              (seq linters) (assoc :linters linters)
+              (seq exclude-linters) (assoc :exclude-linters exclude-linters))]
     (for [warn (:warnings (el/lint opt))]
       (-> warn
           (select-keys [:msg :column :line :uri])
@@ -62,11 +64,11 @@
                 line (or (extract-line-number msg) (.getLineNumber rdr))]
             [{:msg msg :line line :column 0 :path file-path}]))))))
 
-(defn lint-file [file-path env eastwood-linters]
+(defn lint-file [file-path env eastwood-linter-option]
   (or (check-file-syntax file-path)
       (and (= env "clj")
            (some-> (slurp file-path)
                    i.u.ns/extract-ns-sym
-                   (lint-by-eastwood eastwood-linters)))
+                   (lint-by-eastwood eastwood-linter-option)))
       (and (= env "cljs")
            (lint-by-joker file-path))))

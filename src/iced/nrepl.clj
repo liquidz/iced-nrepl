@@ -28,10 +28,10 @@
    {:version (core/version)})
 
 (defn- lint-file-reply [msg]
-  (let [{:keys [transport file env linters]} msg
+  (let [{:keys [transport file env opt]} msg
         env (or env "clj")]
     (try
-      (let [res (lint/lint-file file env linters)]
+      (let [res (lint/lint-file file env opt)]
         (doseq [ls (partition-all send-list-limit res)]
           (transport/send transport (response-for msg {:lint-warnings ls})))
         (transport/send transport (response-for msg {:status :done}))
