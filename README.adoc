@@ -31,12 +31,6 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:content`, `:http-status` (if errored)
 |
 
-| iced-related-namespaces
-|
-| `:ns`
-| `:related-namespaces`
-|
-
 | iced-ns-aliases
 | `:env`, `:code`
 |

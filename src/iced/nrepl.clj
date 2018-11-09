@@ -46,14 +46,6 @@
       {:content (:body res)}
       {:status #{:done :failed} :http-status (:status res)})))
 
-(defn- related-namespaces-reply [msg]
-  (let [{:keys [transport ns]} msg
-        result (namespace/related-namespaces ns)]
-    (doseq [ls (partition-all send-list-limit result)]
-      (transport/send transport (response-for msg {:related-namespaces ls})))
-    (transport/send transport (response-for msg {:status :done})))
-  nil)
-
 (defn- set-indentation-rules-reply [msg]
   (let [{:keys [rules]} msg]
     (format/set-indentation-rules! rules)
@@ -90,7 +82,6 @@
   {"iced-version" version-reply
    "iced-lint-file" lint-file-reply
    "iced-grimoire" grimoire-reply
-   "iced-related-namespaces" related-namespaces-reply
    "iced-ns-aliases" ns-aliases-reply
    "iced-set-indentation-rules" set-indentation-rules-reply
    "iced-format-code-with-indents" format-code-with-indents-reply

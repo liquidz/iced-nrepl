@@ -28,25 +28,3 @@
   (t/testing "cljs with no ns form"
     (t/is (= {}  (sut/aliases "cljs" "")))))
 
-(t/deftest related-namespaces-test
-  (with-redefs [o.ns/project-namespaces
-                (constantly '(foo.bar.baz
-                              foo.xxx.baz
-                              foo.xxx.baz.yyy
-                              bar.baz
-                              bar.foo.baz
-                              foo.bar.baz-test
-                              foo.yyy.baz-test.yyy))]
-    (t/is
-     (compatible
-      (sut/related-namespaces "foo.bar.baz")
-      (fj/just ["foo.xxx.baz"
-                "foo.xxx.baz.yyy"
-                "foo.bar.baz-test"] :in-any-order)))
-
-    (t/is
-     (compatible
-      (sut/related-namespaces "foo.bar.baz-test")
-      (fj/just ["foo.bar.baz"
-                "foo.xxx.baz"
-                "foo.xxx.baz.yyy"] :in-any-order)))))
