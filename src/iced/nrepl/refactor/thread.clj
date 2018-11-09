@@ -1,13 +1,17 @@
 (ns iced.nrepl.refactor.thread
   (:require [clojure.string :as str]))
 
+(def ^:private replace-prefix "__ICED__")
+
 (defmulti expand-sexp (fn [sym _] sym))
 
 (defmethod expand-sexp '->
   [_ x]
   (loop [x x, expanded []]
     (let [[head target & tail] (if (sequential? x) x [])]
-      (if target
+      (if (and target
+               (not (vector? x))
+               (not (str/starts-with? (str head) replace-prefix)))
         (recur target (conj expanded {:head head :tail tail}))
         (conj expanded {:value x})))))
 
@@ -17,7 +21,9 @@
     (let [[head & tail] (if (sequential? x) x [])
           target (last tail)
           tail (drop-last tail)]
-      (if target
+      (if (and target
+               (not (vector? x))
+               (not (str/starts-with? (str head) replace-prefix)))
         (recur target (conj expanded {:head head :tail tail}))
         (conj expanded {:value x})))))
 
@@ -30,13 +36,37 @@
                     [(:value value)] bodies))
       (:value value))))
 
+(defn- lambda-replace-pair [code]
+  (reduce (fn [res x]
+            (assoc res x (str "(" replace-prefix (subs x 2))))
+          {} (re-seq #"#\([^ )]+" code)))
+
+(defn- deref-replace-pair [code]
+  (reduce (fn [res x]
+            (assoc res x (if (str/starts-with? x "@(")
+                           (str "(" replace-prefix (subs x 2))
+                           (str replace-prefix (subs x 1)))))
+          {} (re-seq #"@[^ )]+" code)))
+
+(defn- apply-replace-pairs [code pairs]
+  (reduce (fn [res [before after]] (str/replace res before after))
+          code pairs))
+
+(defn- rollback-replace-pairs [code pairs]
+  (reduce (fn [res [before after]] (str/replace res after before))
+          code pairs))
+
 (defn- thread* [sym code]
-  (let [sexp (read-string code)
+  (let [replace-pairs (merge (lambda-replace-pair code)
+                             (deref-replace-pair code))
+        code' (apply-replace-pairs code replace-pairs)
+        sexp (read-string code')
         expanded (expand-sexp sym sexp)]
     (if (> (count expanded) 2)
       (-> (construct sym expanded)
           str
-          (str/replace "," ""))
+          (str/replace "," "")
+          (rollback-replace-pairs replace-pairs))
       code)))
 
 (def thread-first (partial thread* '->))
