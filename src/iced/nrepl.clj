@@ -9,18 +9,14 @@
             [iced.nrepl.spec :as spec]))
 
 (if (find-ns 'clojure.tools.nrepl)
-  (do
-    (require
-     '[clojure.tools.nrepl.middleware :refer [set-descriptor!]]
-     '[clojure.tools.nrepl.misc :refer [response-for]]
-     '[clojure.tools.nrepl.transport :as transport])
-    (import 'clojure.tools.nrepl.transport.Transport))
-  (do
-    (require
-     '[nrepl.middleware :refer [set-descriptor!]]
-     '[nrepl.misc :refer [response-for]]
-     '[nrepl.transport :as transport])
-    (import 'nrepl.transport.Transport)))
+  (require
+   '[clojure.tools.nrepl.middleware :refer [set-descriptor!]]
+   '[clojure.tools.nrepl.misc :refer [response-for]]
+   '[clojure.tools.nrepl.transport :as transport])
+  (require
+   '[nrepl.middleware :refer [set-descriptor!]]
+   '[nrepl.misc :refer [response-for]]
+   '[nrepl.transport :as transport]))
 
 (def ^:private send-list-limit 50)
 
@@ -89,32 +85,12 @@
    "iced-refactor-thread-last" refactor-thread-last-reply
    "iced-spec-check" spec-check-reply})
 
-(defn json-value-reply
-  [{:keys [transport] :as msg} response]
-  (let [data (try (json/write-str (:value response))
-                  (catch Exception ex ex))]
-    (transport/send transport (response-for msg (if (instance? Exception data)
-                                                  {:json_error (.getMessage data)}
-                                                  {:json data})))))
-
-(defn json-value-transport
-  [{:keys [^Transport transport] :as msg}]
-  (reify Transport
-    (recv [this] (.recv transport))
-    (recv [this timeout] (.recv transport timeout))
-    (send [this response]
-      (when (contains? response :value)
-        (json-value-reply msg response))
-      (.send transport (dissoc response :value)))))
-
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
     (if-let [f (get iced-nrepl-ops op)]
       (when-let [res (f msg)]
         (transport/send transport (response-for msg (merge {:status :done} res))))
-      (handler (if (and (:json msg) (= "eval" op))
-                 (assoc msg :transport (json-value-transport msg))
-                 msg)))))
+        (handler msg))))
 
 (when (resolve 'set-descriptor!)
   (set-descriptor!
