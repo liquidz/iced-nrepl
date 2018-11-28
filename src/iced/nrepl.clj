@@ -73,12 +73,15 @@
   (let [{sym :symbol num-tests :num-tests} msg]
     (spec/check (symbol sym) num-tests)))
 
+(defn- project-ns-list-reply [_msg]
+  {:project-ns-list (namespace/project-ns-list)})
 
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "iced-lint-file" lint-file-reply
    "iced-grimoire" grimoire-reply
    "iced-ns-aliases" ns-aliases-reply
+   "iced-project-ns-list" project-ns-list-reply
    "iced-set-indentation-rules" set-indentation-rules-reply
    "iced-format-code-with-indents" format-code-with-indents-reply
    "iced-refactor-thread-first" refactor-thread-first-reply

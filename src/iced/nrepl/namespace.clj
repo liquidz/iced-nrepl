@@ -23,3 +23,6 @@
                 r.ns.parser/aliases
                 ensure-string-map))
       {}))
+
+(defn project-ns-list []
+  (o.ns/project-namespaces))
