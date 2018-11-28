@@ -8,7 +8,7 @@
                  [org.clojure/test.check "0.10.0-alpha3"]
                  [cider/orchard "0.3.3"]
                  [clj-http "3.9.1"]
-                 [cljfmt "0.6.1" :exclusions [org.clojure/tools.reader
+                 [cljfmt "0.6.2" :exclusions [org.clojure/tools.reader
                                               org.clojure/clojurescript]]
                  [jonase/eastwood "0.3.3" :exclusions [org.clojure/clojure]]
                  [medley "1.0.0"]
