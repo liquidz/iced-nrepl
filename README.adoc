@@ -71,13 +71,6 @@ https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 | `:result` is "OK" or "NG" +
 `:num-tests` must be positive integer
 
-| iced-test-vars
-| `:ns`
-|
-| `:result`, `:test-vars`, `:message` (if errored), `:fail` (if errored)
-| `:result` is "OK" or "NG" +
-`:num-tests` must be positive integer
-
 |===
 
 == License

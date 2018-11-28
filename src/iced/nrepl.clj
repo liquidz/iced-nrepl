@@ -5,8 +5,7 @@
             [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
             [iced.nrepl.refactor.thread :as refactor.thread]
-            [iced.nrepl.spec :as spec]
-            [iced.nrepl.test :as test]))
+            [iced.nrepl.spec :as spec]))
 
 (if (find-ns 'clojure.tools.nrepl)
   (require
@@ -74,12 +73,6 @@
   (let [{sym :symbol num-tests :num-tests} msg]
     (spec/check (symbol sym) num-tests)))
 
-(defn- test-vars-reply [msg]
-  (let [ns-sym (symbol (:ns msg))]
-    (try
-      {:test-vars (test/test-vars ns-sym)}
-      (catch Exception ex
-        {:status #{:done :failed} :error (.getMessage ex)}))))
 
 (def iced-nrepl-ops
   {"iced-version" version-reply
@@ -90,8 +83,7 @@
    "iced-format-code-with-indents" format-code-with-indents-reply
    "iced-refactor-thread-first" refactor-thread-first-reply
    "iced-refactor-thread-last" refactor-thread-last-reply
-   "iced-spec-check" spec-check-reply
-   "iced-test-vars" test-vars-reply})
+   "iced-spec-check" spec-check-reply})
 
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
