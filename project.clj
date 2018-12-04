@@ -10,14 +10,14 @@
                  [clj-http "3.9.1"]
                  [cljfmt "0.6.2" :exclusions [org.clojure/tools.reader
                                               org.clojure/clojurescript]]
-                 [jonase/eastwood "0.3.3" :exclusions [org.clojure/clojure]]
+                 [jonase/eastwood "0.3.4" :exclusions [org.clojure/clojure]]
                  [medley "1.0.0"]
-                 [nrepl "0.5.0"]
+                 [nrepl "0.5.1"]
                  [refactor-nrepl "2.4.0"]]
   :profiles
   {:dev {:dependencies [[fudje "0.9.7"]]}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
-   :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0-RC2"]]}]}
+   :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0-RC3"]]}]}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
