@@ -2,6 +2,7 @@
   (:require [iced.nrepl.core :as core]
             [iced.nrepl.format :as format]
             [iced.nrepl.grimoire :as grimoire]
+            [iced.nrepl.info :as info]
             [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
             [iced.nrepl.refactor.thread :as refactor.thread]
@@ -76,6 +77,10 @@
 (defn- project-ns-list-reply [_msg]
   {:project-ns-list (namespace/project-ns-list)})
 
+(defn- find-var-references-reply [msg]
+  (let [{ns-name :ns sym :symbol} msg]
+    {:var-references (info/find-var-references ns-name sym)}))
+
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "iced-lint-file" lint-file-reply
@@ -86,7 +91,8 @@
    "iced-format-code-with-indents" format-code-with-indents-reply
    "iced-refactor-thread-first" refactor-thread-first-reply
    "iced-refactor-thread-last" refactor-thread-last-reply
-   "iced-spec-check" spec-check-reply})
+   "iced-spec-check" spec-check-reply
+   "iced-find-var-references" find-var-references-reply})
 
 (defn wrap-iced [handler]
   (fn [{:keys [op transport] :as msg}]
