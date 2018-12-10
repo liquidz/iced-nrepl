@@ -30,3 +30,16 @@
       {:formatted (fmt/reformat-string code-str option)}
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))
+
+(defn indent [code-str alias-map]
+  (let [option {:indents @indentation-rules
+                :alias-map (medley/map-keys keyword->string alias-map)
+                :remove-consecutive-blank-lines? false
+                :remove-surrounding-whitespace? false
+                :insert-missing-whitespace? false
+                :indentation? true
+                :remove-trailing-whitespace? false}]
+    (try
+      {:indented (fmt/reformat-string code-str option)}
+      (catch Exception ex
+        (parse-error-message (.getMessage ex))))))

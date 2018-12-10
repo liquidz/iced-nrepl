@@ -51,6 +51,10 @@
   (let [{:keys [code alias-map]} msg]
     (format/code code alias-map)))
 
+(defn- indent-code-reply [msg]
+  (let [{:keys [code alias-map]} msg]
+    (format/indent code alias-map)))
+
 (defn- ns-aliases-reply [msg]
   (let [{:keys [env code]} msg]
     (try
@@ -89,6 +93,7 @@
    "iced-project-ns-list" project-ns-list-reply
    "iced-set-indentation-rules" set-indentation-rules-reply
    "iced-format-code-with-indents" format-code-with-indents-reply
+   "iced-indent-code" indent-code-reply
    "iced-refactor-thread-first" refactor-thread-first-reply
    "iced-refactor-thread-last" refactor-thread-last-reply
    "iced-spec-check" spec-check-reply

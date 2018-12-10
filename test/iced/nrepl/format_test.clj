@@ -37,3 +37,24 @@
          (fj/just {:error (fj/checker string?)
                    :line (fj/checker pos?)
                    :column (fj/checker pos?)}))))
+
+(t/deftest indent-test
+  (sut/set-indentation-rules!
+    {:foo "[[:block 1]]"
+     :bar "[[:block 2]]"
+     :baz/hello "[[:block 2]]"})
+
+  (t/is (= {:indented "(foo 1 2\n     3\n     )"}
+           (sut/indent "(foo 1 2\n3\n)" {})))
+
+  (t/is (= {:indented "(bar 1 2\n  3\n  )"}
+           (sut/indent "(bar 1 2\n3\n)" {})))
+
+  (t/is (= {:indented "(baz/hello 1 2\n  3\n  )"}
+           (sut/indent "(baz/hello 1 2\n3\n)" {})))
+
+  (t/is (= {:indented "(b/hello 1 2\n         3\n         )"}
+           (sut/indent "(b/hello 1 2\n3\n)" {})))
+
+  (t/is (= {:indented "(b/hello 1 2\n  3\n  )"}
+           (sut/indent "(b/hello 1 2\n3\n)" {:b "baz"}))))
