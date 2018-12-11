@@ -12,7 +12,7 @@
                                               org.clojure/clojurescript]]
                  [jonase/eastwood "0.3.4" :exclusions [org.clojure/clojure]]
                  [medley "1.0.0"]
-                 [nrepl "0.5.1"]
+                 [nrepl "0.5.2"]
                  [refactor-nrepl "2.4.0"]]
   :profiles
   {:dev {:dependencies [[fudje "0.9.7"]]}
