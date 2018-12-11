@@ -1,5 +1,6 @@
 (ns iced.nrepl.format
   (:require [cljfmt.core :as fmt]
+            [clojure.string :as str]
             [medley.core :as medley]))
 
 (def ^:private indentation-rules
@@ -31,15 +32,25 @@
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))
 
-(defn indent [code-str alias-map]
+(defn calcalate-indent-level [code-str cursor-line-number alias-map]
   (let [option {:indents @indentation-rules
                 :alias-map (medley/map-keys keyword->string alias-map)
                 :remove-consecutive-blank-lines? false
                 :remove-surrounding-whitespace? false
                 :insert-missing-whitespace? false
                 :indentation? true
-                :remove-trailing-whitespace? false}]
+                :remove-trailing-whitespace? false}
+        indent-keyword "::__vim-iced-calc-indent__"
+        ;; HACK: cljfmt does not indent correctly without any elements.
+        ;;       To indent correctly, add a dummy keyword.
+        code-str (->> (str/split code-str #"\r?\n" (inc cursor-line-number))
+                      (map-indexed #(cond->> %2 (= %1 cursor-line-number)
+                                             (str indent-keyword)))
+                      (str/join "\n"))]
     (try
-      {:indented (fmt/reformat-string code-str option)}
+      (let [indented (fmt/reformat-string code-str option)
+            x (str/index-of indented indent-keyword)
+            y (inc (or (str/last-index-of indented "\n" x) -1))]
+        {:indent-level (- x y)})
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))

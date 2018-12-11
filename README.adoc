@@ -58,11 +58,11 @@ https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 | `:formatted`
 | https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 
-| iced-indent-code
-| `:code`, `:alias-map`
+| iced-calculate-indent-level
+| `:code`, `:line-number`, `:alias-map`
 |
-| `:indented`
-|
+| `:indent-level`, `:error` (if occured)
+| `:line-number` is zero-based
 
 | iced-refactor-thread-first
 | `:code`
