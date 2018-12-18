@@ -3,8 +3,7 @@
   :url "https://github.com/liquidz/iced-nrepl"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.10.0"]
-                 [nrepl "0.5.3"]
+  :dependencies [[nrepl "0.5.3"]
                  [refactor-nrepl "2.4.0"]
 
                  ^:source-dep [org.clojure/data.json "0.2.6"]
