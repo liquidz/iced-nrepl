@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/clojure:lein-2.7.1
+      - image: circleci/clojure:lein-2.8.1
     working_directory: ~/repo
 
     environment:
@@ -15,13 +15,15 @@ jobs:
 
     steps:
       - checkout
+      - run: sudo apt-get install -y make patch
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "project.clj" }}
-          - v1-dependencies-
-      - run: lein deps
+      - run: make deps
       - save_cache:
           paths:
             - ~/.m2
+            - .source-deps
+            - target/srcdeps
           key: v1-dependencies-{{ checksum "project.clj" }}
-      - run: lein test-all
+      - run: make test
