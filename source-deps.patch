@@ -1,0 +1,47 @@
+diff -uprN target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/analyze_ns.clj target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/analyze_ns.clj
+--- target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/analyze_ns.clj	2018-12-18 13:41:32.006062184 +0900
++++ target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/analyze_ns.clj	2018-12-18 13:55:13.695590608 +0900
+@@ -211,7 +211,7 @@ the value of File/separator for the plat
+ 
+ (defn wrapped-exception? [result]
+   (if (instance? mranderson049.eastwood.v0v3v4.eastwood.copieddeps.dep2.clojure.tools.analyzer.jvm.ExceptionThrown result)
+-    (.e ^eastwood.copieddeps.dep2.clojure.tools.analyzer.jvm.ExceptionThrown result)))
++    (.e ^mranderson049.eastwood.v0v3v4.eastwood.copieddeps.dep2.clojure.tools.analyzer.jvm.ExceptionThrown result)))
+ 
+ 
+ (defn asts-with-eval-exception
+diff -uprN target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/lint.clj target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/lint.clj
+--- target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/lint.clj	2018-12-18 13:41:31.818063128 +0900
++++ target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/lint.clj	2018-12-18 13:55:13.695590608 +0900
+@@ -498,8 +498,8 @@ Return value:
+   {:some-warnings (or (> warning-count 0)
+                       (> error-count 0))})
+ 
+-(defn mranderson049.eastwood.v0v3v4.eastwood
+-  ([opts] (mranderson049.eastwood.v0v3v4.eastwood opts (reporting/printing-reporter opts)))
++(defn eastwood
++  ([opts] (eastwood opts (reporting/printing-reporter opts)))
+   ([opts reporter]
+    (try
+      (reporting/note reporter (version/version-string))
+@@ -526,7 +526,7 @@ Return value:
+        {:some-warnings true}))))
+ 
+ (defn eastwood-from-cmdline [opts]
+-  (let [ret (mranderson049.eastwood.v0v3v4.eastwood opts)]
++  (let [ret (eastwood opts)]
+     (if (:some-warnings ret)
+       ;; Exit with non-0 exit status for the benefit of any shell
+       ;; scripts invoking Eastwood that want to know if there were no
+diff -uprN target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/util.clj target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/util.clj
+--- target.org/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/util.clj	2018-12-18 13:41:31.662063911 +0900
++++ target.new/srcdeps/mranderson049/eastwood/v0v3v4/eastwood/util.clj	2018-12-18 13:57:11.364795723 +0900
+@@ -901,7 +901,7 @@ StringWriter."
+ 
+ 
+ (defn builtin-config-to-resource [name]
+-  (io/resource (str "eastwood/config/" name)))
++  (io/resource (str "mranderson049/eastwood/v0v3v4/eastwood/config/" name)))
+ 
+ 
+ (defn init-warning-enable-config [builtin-config-files config-files opt]
