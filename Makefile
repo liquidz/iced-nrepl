@@ -1,9 +1,6 @@
-.PHONY: javac deps patch repl test install deploy clean
+.PHONY: patch deps repl test install release deploy clean
 
-VERSION := 1.10
-
-.diff-match-patch:
-	git clone https://github.com/google/diff-match-patch .diff-match-patch
+VERSION := 1.9
 
 source-deps.patch:
 	diff -uprN target.org/srcdeps target.new/srcdeps > source-deps.patch
@@ -17,27 +14,23 @@ patch:
 	\rm -rf target && \cp -pir target.org target
 	(cd target && patch -p1 < ../source-deps.patch)
 
-javac: .diff-match-patch
-	lein javac
-
 deps: .source-deps patch
 
-repl: javac .source-deps
+repl: .source-deps
 	iced repl with-profile $(VERSION),+plugin.mranderson/config
 
-test: javac .source-deps
+test: .source-deps
 	lein with-profile +plugin.mranderson/config test-all
 
-install: javac .source-deps
+install: .source-deps
 	lein with-profile +$(VERSION),+plugin.mranderson/config install
 
 release:
 	lein with-profile +$(VERSION) release
 
-deploy: javac .source-deps
+deploy: .source-deps
 	lein with-profile +$(VERSION),+plugin.mranderson/config deploy clojars
 
 clean:
 	lein clean
-	\rm -rf .diff-match-patch
 	\rm -f .source-deps

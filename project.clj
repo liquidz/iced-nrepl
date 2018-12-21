@@ -14,11 +14,8 @@
                                                            org.clojure/tools.reader]]
                  ^:source-dep [http-kit "2.3.0"]
                  ^:source-dep [jonase/eastwood "0.3.4"
-                               :exclusions [org.clojars.brenton/google-diff-match-patch
-                                            org.clojure/clojure]]
+                               :exclusions [org.clojure/clojure]]
                  ^:source-dep [medley "1.0.0"]]
-
-  :java-source-paths [".diff-match-patch/java/src"]
 
   :plugins [[thomasa/mranderson "0.4.9"]]
 
