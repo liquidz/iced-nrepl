@@ -1,11 +1,10 @@
 (ns iced.nrepl.grimoire
-  (:require [clj-http.client :as client]
-            [clj-http.util :as util]))
+  (:require [org.httpkit.client :as http]))
 
 (def ^:private grimoire-url "https://conj.io")
 
 (defn search [platform ns-name sym]
   (let [url (format "%s/search/v1/%s/%s/%s/"
                     grimoire-url platform ns-name
-                    (util/url-encode sym))]
-    (client/get url {:content-type :text})))
+                    (http/url-encode sym))]
+    @(http/get url {:headers {"Content-Type" "text/plain"}})))

@@ -1,4 +1,6 @@
 /target
+/target.org
+/target.new
 /classes
 /checkouts
 pom.xml
@@ -9,3 +11,5 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+.source-deps
+.diff-match-patch

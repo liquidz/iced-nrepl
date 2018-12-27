@@ -7,14 +7,38 @@
             [fudje.sweet :as fj]
             [iced.nrepl.lint :as sut]))
 
+(def ^:private test-url
+  (io/as-url (io/file "project.clj")))
+
 (t/deftest lint-by-eastwood-test
   (with-redefs [el/lint (constantly {:warnings [{:column 1 :line 2 :msg "dummy"
-                                                 :uri (io/as-url (io/file "project.clj")) :foo "bar"}]})]
+                                                 :uri test-url :foo "bar"}]})]
     (t/is
      (compatible
       (sut/lint-by-eastwood 'dummy nil)
       (fj/just [{:column 1 :line 2 :msg "dummy"
                  :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
+
+(t/deftest lint-by-eastwood-with-warn-data-test
+  (with-redefs [el/lint (constantly {:warnings [{:king :lint-warning
+                                                 :warn-data {:column 3 :line 4 :msg "dummy"
+                                                             :uri test-url :foo "bar"}}]})]
+    (t/is
+     (compatible
+      (sut/lint-by-eastwood 'dummy nil)
+      (fj/just [{:column 3 :line 4 :msg "dummy"
+                 :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
+
+(t/deftest lint-by-eastwood-with-invalid-column-line-test
+  (with-redefs [el/lint (constantly {:warnings [{:king :lint-warning
+                                                 :warn-data {:column []
+                                                             :line "invalid"
+                                                             :msg "dummy"
+                                                             :uri test-url :foo "bar"}}]})]
+    (t/is
+     (compatible
+      (sut/lint-by-eastwood 'dummy nil)
+      (fj/just [{:msg "dummy" :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
 
 (t/deftest lint-by-eastwood-no-error-test
   (t/is (empty?  (sut/lint-by-eastwood 'iced.nrepl.lint-test nil))))

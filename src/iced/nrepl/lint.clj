@@ -39,11 +39,15 @@
         opt (cond-> {:namespaces [ns-sym]}
               (seq linters) (assoc :linters linters)
               (seq exclude-linters) (assoc :exclude-linters exclude-linters))]
-    (for [warn (:warnings (el/lint opt))]
-      (-> warn
-          (select-keys [:msg :column :line :uri])
-          (update :uri #(.getPath %))
-          (set/rename-keys {:uri :path})))))
+    (for [{:keys [warn-data] :as warn} (:warnings (el/lint opt))
+          :let [extract (fn [k] (get warn-data k (get warn k)))
+                column (extract :column)
+                line (extract :line)]]
+      (cond-> {:msg (extract :msg)
+               :path (when-let [uri (extract :uri)]
+                       (.getPath uri))}
+        (integer? column) (assoc :column column)
+        (integer? line) (assoc :line line)))))
 
 (defn- remove-exception-name [s]
   (str/replace s "java.lang.RuntimeException: " ""))
