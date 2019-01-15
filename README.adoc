@@ -31,14 +31,6 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:content`, `:http-status` (if errored)
 |
 
-| iced-ns-aliases
-| `:env`, `:code`
-|
-| `:aliases`, `:error` (if occured)
-| `:env` must be "clj" or "cljs" +
-`:code` is `ns` form code
-https://github.com/clojure-emacs/cider-nrepl/pull/558[WILL DEPRECATE]
-
 | iced-project-ns-list
 |
 |

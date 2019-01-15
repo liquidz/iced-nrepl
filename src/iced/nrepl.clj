@@ -55,13 +55,6 @@
   (let [{:keys [code line-number alias-map]} msg]
     (format/calcalate-indent-level code line-number alias-map)))
 
-(defn- ns-aliases-reply [msg]
-  (let [{:keys [env code]} msg]
-    (try
-      {:aliases (namespace/aliases env code)}
-      (catch Exception ex
-        {:aliases {} :error (.getMessage ex)}))))
-
 (defn- refactor-thread-first-reply [msg]
   (try
     {:code (refactor.thread/thread-first (:code msg))}
@@ -89,7 +82,6 @@
   {"iced-version" version-reply
    "iced-lint-file" lint-file-reply
    "iced-grimoire" grimoire-reply
-   "iced-ns-aliases" ns-aliases-reply
    "iced-project-ns-list" project-ns-list-reply
    "iced-set-indentation-rules" set-indentation-rules-reply
    "iced-format-code-with-indents" format-code-with-indents-reply
