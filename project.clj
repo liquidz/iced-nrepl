@@ -9,13 +9,13 @@
                  ^:source-dep [org.clojure/data.json "0.2.6"]
                  ^:source-dep [org.clojure/test.check "0.10.0-alpha3"]
                  ^:source-dep [org.clojure/tools.namespace "0.3.0-alpha4"]
-                 ^:source-dep [cider/orchard "0.3.3"]
+                 ^:source-dep [cider/orchard "0.4.0"]
                  ^:source-dep [cljfmt "0.6.3" :exclusions [org.clojure/clojurescript
                                                            org.clojure/tools.reader]]
                  ^:source-dep [http-kit "2.3.0"]
                  ^:source-dep [jonase/eastwood "0.3.4"
                                :exclusions [org.clojure/clojure]]
-                 ^:source-dep [medley "1.0.0"]]
+                 ^:source-dep [medley "1.1.0"]]
 
   :plugins [[thomasa/mranderson "0.4.9"]]
 
