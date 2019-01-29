@@ -13,3 +13,4 @@ pom.xml.asc
 .hg/
 .source-deps
 .diff-match-patch
+.patch

@@ -10,25 +10,26 @@ source-deps.patch:
 	\rm -rf target.org && \cp -pir target target.org
 	touch .source-deps
 
-patch:
+.patch:
 	\rm -rf target && \cp -pir target.org target
 	(cd target && patch -p1 < ../source-deps.patch)
+	touch .patch
 
-deps: .source-deps patch
+deps: .source-deps .patch
 
-repl: .source-deps
+repl: .source-deps .patch
 	iced repl with-profile $(VERSION),+plugin.mranderson/config
 
-test: .source-deps
+test: .source-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
 
-install: .source-deps
+install: .source-deps .patch
 	lein with-profile +$(VERSION),+plugin.mranderson/config install
 
 release:
 	lein with-profile +$(VERSION) release
 
-deploy: .source-deps
+deploy: .source-deps .patch
 	lein with-profile +$(VERSION),+plugin.mranderson/config deploy clojars
 
 clean:
