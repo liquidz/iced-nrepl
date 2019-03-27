@@ -39,9 +39,10 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 
 | iced-set-indentation-rules
 | `:rules`
-|
+| `:overwrite?`
 |
 | default indentation rule is `cljfmt.core/default-indents` +
+If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be used. +
 https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 
 | iced-format-code-with-indents
