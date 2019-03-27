@@ -17,8 +17,8 @@ source-deps.patch:
 
 deps: .source-deps .patch
 
-repl: .source-deps .patch
-	iced repl with-profile $(VERSION),+plugin.mranderson/config
+repl:
+	iced repl --without-cljs with-profile $(VERSION)
 
 test: .source-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
