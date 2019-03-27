@@ -11,6 +11,7 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-.source-deps
+.inline-deps
 .diff-match-patch
 .patch
+.eastwood
