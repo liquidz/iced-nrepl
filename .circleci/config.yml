@@ -20,7 +20,7 @@ _job-body: &job-body
     - save_cache:
         paths:
           - ~/.m2
-          - .source-deps
+          - .inline-deps
           - target/srcdeps
           - target.org/srcdeps
         key: v2-dependencies-{{ checksum "project.clj" }}

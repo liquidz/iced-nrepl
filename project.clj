@@ -6,24 +6,24 @@
   :dependencies [[nrepl "0.6.0"]
                  [refactor-nrepl "2.4.0"]
 
-                 ^:source-dep [org.clojure/data.json "0.2.6"
+                 ^:inline-dep [org.clojure/data.json "0.2.6"
                                :exclusions [org.clojure/clojure]]
-                 ^:source-dep [org.clojure/test.check "0.10.0-alpha3"
+                 ^:inline-dep [org.clojure/test.check "0.10.0-alpha3"
                                :exclusions [org.clojure/clojure]]
-                 ^:source-dep [org.clojure/tools.namespace "0.3.0-alpha4"
+                 ^:inline-dep [org.clojure/tools.namespace "0.3.0-alpha4"
                                :exclusions [org.clojure/java.classpath]]
-                 ^:source-dep [cider/orchard "0.4.0"]
-                 ^:source-dep [cljfmt "0.6.4"
+                 ^:inline-dep [cider/orchard "0.4.0"]
+                 ^:inline-dep [cljfmt "0.6.4"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
-                 ^:source-dep [http-kit "2.3.0"]
-                 ^:source-dep [jonase/eastwood "0.3.5"
+                 ^:inline-dep [http-kit "2.3.0"]
+                 ^:inline-dep [jonase/eastwood "0.3.5"
                                :exclusions [org.clojure/clojure]]
-                 ^:source-dep [medley "1.1.0"
+                 ^:inline-dep [medley "1.1.0"
                                :exclusions [org.clojure/clojure]]]
 
-  :plugins [[thomasa/mranderson "0.5.0"]]
+  :plugins [[thomasa/mranderson "0.5.1"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles
