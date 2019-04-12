@@ -43,8 +43,8 @@
       {:status #{:done :failed} :http-status (:status res)})))
 
 (defn- set-indentation-rules-reply [msg]
-  (let [{:keys [rules]} msg]
-    (format/set-indentation-rules! rules)
+  (let [{:keys [rules overwrite?]} msg]
+    (format/set-indentation-rules! rules overwrite?)
     {:status #{:done}}))
 
 (defn- format-code-with-indents-reply [msg]

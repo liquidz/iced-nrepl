@@ -2,35 +2,36 @@
 
 VERSION := 1.9
 
-source-deps.patch:
-	diff -uprN target.org/srcdeps target.new/srcdeps > source-deps.patch
+inline-deps.patch:
+	diff -uprN target.org/srcdeps target.new/srcdeps > inline-deps.patch
 
-.source-deps:
-	lein source-deps
+.inline-deps:
+	lein inline-deps
 	\rm -rf target.org && \cp -pir target target.org
-	touch .source-deps
+	touch .inline-deps
 
-patch:
+.patch:
 	\rm -rf target && \cp -pir target.org target
-	(cd target && patch -p1 < ../source-deps.patch)
+	(cd target && patch -p1 < ../inline-deps.patch)
+	touch .patch
 
-deps: .source-deps patch
+deps: .inline-deps .patch
 
-repl: .source-deps
-	iced repl with-profile $(VERSION),+plugin.mranderson/config
+repl:
+	iced repl --without-cljs with-profile $(VERSION)
 
-test: .source-deps
+test: .inline-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
 
-install: .source-deps
+install: .inline-deps .patch
 	lein with-profile +$(VERSION),+plugin.mranderson/config install
 
 release:
 	lein with-profile +$(VERSION) release
 
-deploy: .source-deps
+deploy: .inline-deps .patch
 	lein with-profile +$(VERSION),+plugin.mranderson/config deploy clojars
 
 clean:
 	lein clean
-	\rm -f .source-deps
+	\rm -f .inline-deps .patch

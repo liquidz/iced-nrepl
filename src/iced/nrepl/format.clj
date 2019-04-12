@@ -7,17 +7,23 @@
   (atom fmt/default-indents))
 
 (defn- keyword->string [kw]
-  (subs (str kw) 1))
+  (str (.sym kw)))
 
-(def ^:private keyword->symbol
-  (comp symbol keyword->string))
+(defn- read-symbol [sym]
+  (read-string (str sym)))
 
-(defn set-indentation-rules! [rules]
-  (->> rules
-       (reduce (fn [res [k v]]
-                 (assoc res (keyword->symbol k) (read-string v)))
-               fmt/default-indents)
-       (reset! indentation-rules)))
+(defn- read-keyword [kw]
+  (let [sym (.sym kw)]
+    (cond-> sym
+      (str/starts-with? (str sym) "#\"") read-symbol)))
+
+(defn set-indentation-rules! [rules overwrite?]
+  (let [default-indents (if overwrite? {} fmt/default-indents)]
+    (->> rules
+         (reduce (fn [res [k v]]
+                   (assoc res (read-keyword k) (read-string v)))
+                 default-indents)
+         (reset! indentation-rules))))
 
 (defn- parse-error-message [s]
   (if-let [[[_ line column]] (re-seq #"at line (\d+), column (\d+)" s)]
