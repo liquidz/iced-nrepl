@@ -76,12 +76,6 @@ https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 | `:result` is "OK" or "NG" +
 `:num-tests` must be positive integer
 
-| iced-find-var-references
-| `:ns`, `:symbol`
-|
-| `:var-references`
-|
-
 |===
 
 == License
