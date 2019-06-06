@@ -1,7 +1,6 @@
 (ns iced.nrepl.lint
   (:require [clojure.java.io :as io]
             [clojure.java.shell :as shell]
-            [clojure.set :as set]
             [clojure.string :as str]
             [eastwood.lint :as el]
             [iced.util.namespace :as i.u.ns]))
