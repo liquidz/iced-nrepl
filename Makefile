@@ -1,6 +1,6 @@
 .PHONY: patch deps repl test install release deploy clean
 
-VERSION := 1.9
+VERSION := 1.10.1
 
 inline-deps.patch:
 	diff -uprN target.org/srcdeps target.new/srcdeps > inline-deps.patch

@@ -29,7 +29,8 @@
   :profiles
   {:dev {:dependencies [[fudje "0.9.7"]]}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
-   :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]}
+   :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]
+   :1.10.1 [:dev {:dependencies [[org.clojure/clojure "1.10.1"]]}]}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
@@ -39,5 +40,5 @@
                   ["vcs" "commit"]
                   ["vcs" "push"]]
 
-  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10" "test"]]}
+  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.1" "test"]]}
   )
