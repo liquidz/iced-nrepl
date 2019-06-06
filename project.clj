@@ -20,7 +20,7 @@
                  ^:inline-dep [http-kit "2.4.0-alpha4"]
                  ^:inline-dep [jonase/eastwood "0.3.5"
                                :exclusions [org.clojure/clojure]]
-                 ^:inline-dep [medley "1.1.0"
+                 ^:inline-dep [medley "1.2.0"
                                :exclusions [org.clojure/clojure]]]
 
   :plugins [[thomasa/mranderson "0.5.1"]]
