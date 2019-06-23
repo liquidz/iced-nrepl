@@ -4,6 +4,7 @@ https://github.com/nrepl/nREPL[nREPL] middleware to support https://github.com/l
 
 image:https://img.shields.io/circleci/project/github/liquidz/iced-nrepl/master.svg["CircleCI", link="https://circleci.com/gh/liquidz/iced-nrepl"]
 image:https://versions.deps.co/liquidz/iced-nrepl/status.svg["Dependencies Status", link="https://versions.deps.co/liquidz/iced-nrepl"]
+image:https://codecov.io/gh/liquidz/iced-nrepl/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/liquidz/iced-nrepl"]
 image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="https://clojars.org/iced-nrepl"]
 
 == Ops
