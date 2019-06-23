@@ -1,9 +1,12 @@
 (ns iced.nrepl.format-test
-  (:require [cljfmt.core :as fmt]
+  (:require [clojure.string :as str]
             [clojure.test :as t]
             [fudje.sweet :as fj]
             [iced.nrepl.format :as sut]
+            [iced.test-helper :as h]
             [medley.core :as medley]))
+
+(t/use-fixtures :once h/repl-server-fixture)
 
 (def ^:private test-indentation-rules
   (let [reg (keyword "#\"^icedtest\"")]
@@ -16,22 +19,33 @@
        (apply = (map str regexps))))
 
 (t/deftest set-indentation-rules!-test
-  (sut/set-indentation-rules! test-indentation-rules nil)
-  (let [rules @(deref #'sut/indentation-rules)]
-    (t/is (> (count rules) 3))
+  (sut/set-indentation-rules! {} 1)
+  (t/is (empty? @(deref #'sut/indentation-rules)))
 
+  (let [resp (h/message {:op "iced-set-indentation-rules"
+                         :rules test-indentation-rules})
+        rules @(deref #'sut/indentation-rules)]
+    (t/is (contains? (:status resp) "done"))
+
+    (t/is (> (count rules) 3))
     (t/is
      (compatible
       rules
       (fj/contains {'foo [[:block 1]]
                     'bar/baz [[:block 2] [:inner 1]]})))
-
     (let [[_ v] (medley/find-first #(reg= #"^icedtest" (first %)) rules)]
       (t/is (= [[:inner 0]] v)))))
 
 (t/deftest set-indentation-ruled!-with-overwrite-test
-  (sut/set-indentation-rules! test-indentation-rules 1)
-  (let [rules @(deref #'sut/indentation-rules)]
+  (sut/set-indentation-rules! {} 1)
+  (t/is (empty? @(deref #'sut/indentation-rules)))
+
+  (let [resp (h/message {:op "iced-set-indentation-rules"
+                         :rules test-indentation-rules
+                         :overwrite? 1})
+        rules @(deref #'sut/indentation-rules)]
+    (t/is (contains? (:status resp) "done"))
+
     (t/is (= 3 (count rules)))
     (t/is (map? rules))
 
@@ -43,25 +57,29 @@
       (t/is (= [[:inner 0]] v)))))
 
 (t/deftest code-test
-  (t/is (= {:formatted "(hello (world))"}
-           (sut/code "(hello (world  )  )" {}))))
+  (let [resp (h/message {:op "iced-format-code-with-indents"
+                         :code "(hello (world  )  )"
+                         :alias-map {}})]
+    (t/is (= "(hello (world))" (:formatted resp)))))
 
 (t/deftest code-option-test
   (sut/set-indentation-rules! test-indentation-rules nil)
-  (with-redefs [fmt/reformat-string (fn [_ opt] opt)]
-    (let [alias-map {:str "clojure.string"}]
-      (t/is
-       (compatible
-        (:formatted (sut/code "" alias-map))
-        (fj/contains {:indents (fj/contains {'foo [[:block 1]]})
-                      :alias-map {"str" "clojure.string"}}))))))
+  (t/are [code alias-map expected]
+         (= expected (:formatted (h/message {:op "iced-format-code-with-indents"
+                                             :code code
+                                             :alias-map alias-map})))
+    "(bar/baz 1 2\n3)", {},          "(bar/baz 1 2\n  3)"
+    "(b/baz 1 2\n3)",   {},          "(b/baz 1 2\n       3)"
+    "(b/baz 1 2\n3)",   {"b" "bar"}, "(b/baz 1 2\n  3)"))
 
 (t/deftest code-error-test
-  (t/is (compatible
-         (sut/code "(hello (world)" {})
-         (fj/just {:error (fj/checker string?)
-                   :line (fj/checker pos?)
-                   :column (fj/checker pos?)}))))
+  (let [resp (h/message {:op "iced-format-code-with-indents"
+                         :code "(hello (world)"
+                         :alias-map {}})]
+    (t/is (contains? (:status resp) "done"))
+    (t/is (not (str/blank? (:error resp))))
+    (t/is (pos-int? (:line resp)))
+    (t/is (pos-int? (:column resp)))))
 
 (t/deftest calculate-indent-level-test
   (sut/set-indentation-rules!
@@ -70,17 +88,13 @@
     :baz/hello "[[:block 2]]"}
    nil)
 
-  (t/is (= {:indent-level 5}
-           (sut/calcalate-indent-level "(foo 1 2\n3\n)" 1 {})))
-
-  (t/is (= {:indent-level 2}
-           (sut/calcalate-indent-level "(bar 1 2\n3\n)" 1 {})))
-
-  (t/is (= {:indent-level 2}
-           (sut/calcalate-indent-level "(baz/hello 1 2\n3\n)" 1 {})))
-
-  (t/is (= {:indent-level 9}
-           (sut/calcalate-indent-level "(b/hello 1 2\n3\n)" 1 {})))
-
-  (t/is (= {:indent-level 2}
-           (sut/calcalate-indent-level "(b/hello 1 2\n3\n)" 1 {:b "baz"}))))
+  (t/are [code lnum alias-map expected]
+         (= expected (:indent-level (h/message {:op "iced-calculate-indent-level"
+                                                :code code
+                                                :line-number lnum
+                                                :alias-map alias-map})))
+    "(foo 1 2\n3\n)",       1, {},         5
+    "(bar 1 2\n3\n)",       1, {},         2
+    "(baz/hello 1 2\n3\n)", 1, {},         2
+    "(b/hello 1 2\n3\n)",   1, {},         9
+    "(b/hello 1 2\n3\n)",   1, {:b "baz"}, 2))
