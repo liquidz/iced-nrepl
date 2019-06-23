@@ -1,13 +1,14 @@
 (ns iced.nrepl.spec)
 
 (defn- try-requires [& syms]
-  (try 
+  (try
     (doseq [sym syms]
       (require sym))
     (catch Exception ex nil)))
 
 (try-requires 'clojure.spec.test.alpha
-              'clojure.spec.test)
+              'clojure.spec.test
+              'clojure.test.check.generators)
 
 (defmacro stest [fname & args]
   `(when-let [f# (or (resolve (symbol "clojure.spec.test.alpha" ~fname))
