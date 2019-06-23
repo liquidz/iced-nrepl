@@ -31,10 +31,26 @@ jobs:
     docker:
       - image: circleci/clojure:openjdk-8-lein
     <<: *job-body
+
   java11:
     docker:
       - image: circleci/clojure:openjdk-11-lein
     <<: *job-body
+
+  coverage:
+    docker:
+      - image: circleci/clojure:openjdk-11-lein
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "project.clj" }}
+      - run: make coverage
+      - run: bash <(curl -s https://codecov.io/bash)
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v2-dependencies-{{ checksum "project.clj" }}
 
 workflows:
   version: 2
@@ -42,4 +58,10 @@ workflows:
     jobs:
       - java8
       - java11
-
+      - coverage:
+          requires:
+            - java8
+            - java11
+          filters:
+            branches:
+              only: master

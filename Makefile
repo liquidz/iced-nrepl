@@ -21,16 +21,20 @@ repl:
 	iced repl --without-cljs with-profile $(VERSION)
 
 coverage:
-	lein with-profile +$(VERSION) cloverage
+	lein with-profile +$(VERSION) cloverage --codecov
 
 test: .inline-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
+dev-test:
+	lein test-all
 
 install: .inline-deps .patch
-	lein with-profile +$(VERSION),+plugin.mranderson/config install
+	lein with-profile +release,+plugin.mranderson/config install
+dev-install:
+	lein with-profile +release install
 
 release:
-	lein with-profile +$(VERSION) release
+	lein with-profile +release release
 
 deploy: .inline-deps .patch
 	lein with-profile +$(VERSION),+plugin.mranderson/config deploy clojars
