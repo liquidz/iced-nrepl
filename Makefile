@@ -20,6 +20,9 @@ deps: .inline-deps .patch
 repl:
 	iced repl --without-cljs with-profile $(VERSION)
 
+coverage:
+	lein with-profile +$(VERSION) cloverage
+
 test: .inline-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
 
