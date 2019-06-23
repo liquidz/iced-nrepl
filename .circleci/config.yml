@@ -44,13 +44,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "project.clj" }}
+            - v2-cov-dependencies-{{ checksum "project.clj" }}
       - run: make coverage
       - run: bash <(curl -s https://codecov.io/bash)
       - save_cache:
           paths:
             - ~/.m2
-          key: v2-dependencies-{{ checksum "project.clj" }}
+          key: v2-cov-dependencies-{{ checksum "project.clj" }}
 
 workflows:
   version: 2
