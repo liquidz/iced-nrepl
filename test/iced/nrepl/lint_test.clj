@@ -5,32 +5,44 @@
             [clojure.test :as t]
             [eastwood.lint :as el]
             [fudje.sweet :as fj]
-            [iced.nrepl.lint :as sut]))
+            [iced.nrepl.lint :as sut]
+            [iced.test-helper :as h]))
+
+(t/use-fixtures :once h/repl-server-fixture)
 
 (def ^:private test-url
   (io/as-url (io/file "project.clj")))
 
-(t/deftest lint-by-eastwood-test
-  (with-redefs [el/lint (constantly {:warnings [{:column 1 :line 2 :msg "dummy"
-                                                 :uri test-url :foo "bar"}]})]
-    (t/is
-     (compatible
-      (sut/lint-by-eastwood 'dummy nil)
-      (fj/just [{:column 1 :line 2 :msg "dummy"
-                 :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
+(t/deftest lint-file-clj-success-test
+  (let [path "src/iced/nrepl/lint.clj"
+        _ (h/message {:op "load-file" :file (slurp path)})
+        resp (h/message {:op "iced-lint-file"
+                         :file path
+                         :env "clj"
+                         :opt {"linters" ["all"]}})]
+    (t/is (contains? (:status resp) "done"))
+    (t/is (not (contains? resp :lint-warnings)))))
 
-(t/deftest lint-by-eastwood-with-warn-data-test
-  (with-redefs [el/lint (constantly {:warnings [{:king :lint-warning
-                                                 :warn-data {:column 3 :line 4 :msg "dummy"
-                                                             :uri test-url :foo "bar"}}]})]
+(t/deftest lint-file-clj-warning-test
+  (let [path "test/files/lint/private_never_used.clj"
+        _ (h/message {:op "load-file" :file (slurp path)})
+        resp (h/message {:op "iced-lint-file"
+                         :file path
+                         :env "clj"
+                         :opt {"linters" ["all"]}})
+        warnings (get resp :lint-warnings [])]
+    (t/is (contains? (:status resp) "done"))
+    (t/is (= 1 (count warnings)))
     (t/is
      (compatible
-      (sut/lint-by-eastwood 'dummy nil)
-      (fj/just [{:column 3 :line 4 :msg "dummy"
-                 :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
+      (first warnings)
+      (fj/just {:column 1
+                :line 3
+                :msg (fj/checker string?)
+                :path (.getAbsolutePath (io/file path))})))))
 
 (t/deftest lint-by-eastwood-with-invalid-column-line-test
-  (with-redefs [el/lint (constantly {:warnings [{:king :lint-warning
+  (with-redefs [el/lint (constantly {:warnings [{:kind :lint-warning
                                                  :warn-data {:column []
                                                              :line "invalid"
                                                              :msg "dummy"
@@ -39,9 +51,6 @@
      (compatible
       (sut/lint-by-eastwood 'dummy nil)
       (fj/just [{:msg "dummy" :path (fj/checker #(str/ends-with? % "project.clj"))}])))))
-
-(t/deftest lint-by-eastwood-no-error-test
-  (t/is (empty?  (sut/lint-by-eastwood 'iced.nrepl.lint-test nil))))
 
 (t/deftest lint-by-joker-test
   (with-redefs [sut/working-directory (constantly ".")
@@ -73,20 +82,26 @@
     (t/is (thrown? Exception (sut/lint-by-joker "dummy file")))))
 
 (t/deftest check-file-syntax-test
-  (let [path "test/files/lint/not_closing_paren.edn"]
+  (let [path "test/files/lint/not_closing_paren.edn"
+        resp (h/message {:op "iced-lint-file"
+                         :file path
+                         :env "clj"})
+        warnings (get resp :lint-warnings [])]
+    (t/is (contains? (:status resp) "done"))
+    (t/is (= 1 (count warnings)))
     (t/is
      (compatible
-      (sut/check-file-syntax path)
-      (fj/just [{:path path
-                 :msg (fj/checker string?)
-                 :line 3
-                 :column 0}]))))
+      (first warnings)
+      (fj/just {:column 0 :line 3 :msg (fj/checker string?) :path path}))))
 
-  (let [path "test/files/lint/not_matched_closing_paren.edn"]
+  (let [path "test/files/lint/not_matched_closing_paren.edn"
+        resp (h/message {:op "iced-lint-file"
+                         :file path
+                         :env "clj"})
+        warnings (get resp :lint-warnings [])]
+    (t/is (contains? (:status resp) "done"))
+    (t/is (= 1 (count warnings)))
     (t/is
      (compatible
-      (sut/check-file-syntax path)
-      (fj/just [{:path path
-                 :msg (fj/checker string?)
-                 :line 6
-                 :column 0}])))))
+      (first warnings)
+      (fj/just {:column 0 :line 6 :msg (fj/checker string?) :path path})))))
