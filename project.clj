@@ -4,8 +4,6 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[nrepl "0.6.0"]
-                 [refactor-nrepl "2.4.0"]
-
                  ^:inline-dep [org.clojure/data.json "0.2.6"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/test.check "0.10.0-alpha3"
