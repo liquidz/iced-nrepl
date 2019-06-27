@@ -15,7 +15,6 @@
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
-                 ^:inline-dep [http-kit "2.4.0-alpha4"]
                  ^:inline-dep [jonase/eastwood "0.3.5"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [medley "1.2.0"

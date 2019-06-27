@@ -1,7 +1,6 @@
 (ns iced.nrepl
   (:require [iced.nrepl.core :as core]
             [iced.nrepl.format :as format]
-            [iced.nrepl.grimoire :as grimoire]
             [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
             [iced.nrepl.refactor.thread :as refactor.thread]
@@ -33,13 +32,6 @@
         nil)
       (catch Throwable ex
         {:lint-warnings [] :error (.getMessage ex)}))))
-
-(defn- grimoire-reply [msg]
-  (let [{platform :platform ns-name :ns sym :symbol} msg
-        res (grimoire/search platform ns-name sym)]
-    (if (= 200 (:status res))
-      {:content (:body res)}
-      {:status #{:done :failed} :http-status (:status res)})))
 
 (defn- set-indentation-rules-reply [msg]
   (let [{:keys [rules overwrite?]} msg]
@@ -76,7 +68,6 @@
 (def iced-nrepl-ops
   {"iced-version" version-reply
    "iced-lint-file" lint-file-reply
-   "iced-grimoire" grimoire-reply
    "iced-project-ns-list" project-ns-list-reply
    "iced-set-indentation-rules" set-indentation-rules-reply
    "iced-format-code-with-indents" format-code-with-indents-reply

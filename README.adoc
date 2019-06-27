@@ -26,12 +26,6 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:env` must be "clj" or "cljs" +
 `:opt` is a option map for https://github.com/jonase/eastwood#usage[jonase/eastwood] such as `:linters`, `:exclute-linters` and so on.
 
-| iced-grimoire
-| `:platform`, `:ns`, `:symbol`
-|
-| `:content`, `:http-status` (if errored)
-|
-
 | iced-project-ns-list
 |
 |
