@@ -4,7 +4,7 @@
   (try
     (doseq [sym syms]
       (require sym))
-    (catch Exception ex nil)))
+    (catch Exception _ nil)))
 
 (try-requires 'clojure.spec.test.alpha
               'clojure.spec.test

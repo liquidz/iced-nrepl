@@ -1,33 +1,32 @@
 (ns iced.nrepl.spec-test
-  (:require [clojure.spec.alpha :as s]
-            [clojure.test :as t]
+  (:require [clojure.test :as t]
             [fudje.sweet :as fj]
-            [iced.nrepl.spec :as sut]))
+            [iced.test-helper :as h]))
 
-(defn success-func [_] true)
-(s/fdef success-func
-  :args (s/cat :_ any?)
-  :ret boolean?)
-
-(defn fail-func [_] true)
-(s/fdef fail-func
-        :args (s/cat :_ any?)
-        :ret string?)
-
-(defn no-spec-func [] true)
+(t/use-fixtures :once h/repl-server-fixture)
 
 (t/deftest check-test
-  (t/is (= {:result "OK" :num-tests 10}
-           (sut/check `success-func 10)))
+  (h/message {:op "load-file" :file (slurp "test/files/spec/test.clj")})
 
-  (t/is
-   (compatible
-    (sut/check `fail-func 10)
-    (fj/just {:result "NG"
-              :num-tests (fj/checker int?)
-              :message (fj/checker string?)
-              :fail (fj/checker any?)}))))
+  (t/testing "success"
+    (let [resp (h/message {:op "iced-spec-check" :symbol "files.spec.test/success-func" :num-tests 10})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= 10 (:num-tests resp)))
+      (t/is (= "OK" (:result resp)))))
 
-(t/deftest check-with-no-spec-function-test
-  (t/is (= {:result "OK" :num-tests 0}
-           (sut/check `no-spec-func 10))))
+  (t/testing "fail"
+    (t/is
+     (compatible
+      (h/message {:op "iced-spec-check" :symbol "files.spec.test/fail-func" :num-tests 10})
+      (fj/contains
+       {:status (fj/checker #(contains? % "done"))
+        :num-tests 1
+        :result "NG"
+        :message (fj/checker string?)
+        :fail (fj/checker any?)}))))
+
+  (t/testing "no spec"
+    (let [resp (h/message {:op "iced-spec-check" :symbol "files.spec.test/no-spec-func" :num-tests 10})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= 0 (:num-tests resp)))
+      (t/is (= "OK" (:result resp))))))
