@@ -25,7 +25,8 @@
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles
-  {:dev {:dependencies [[fudje "0.9.7"]]}
+  {:dev {:dependencies [[fudje "0.9.7"]]
+         :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]
    :1.10.1 [:dev {:dependencies [[org.clojure/clojure "1.10.1"]]}]

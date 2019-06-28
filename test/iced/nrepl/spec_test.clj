@@ -22,8 +22,8 @@
        {:status (fj/checker #(contains? % "done"))
         :num-tests 1
         :result "NG"
-        :message (fj/checker string?)
-        :fail (fj/checker any?)}))))
+        :error (fj/checker string?)
+        :failed-input (fj/checker any?)}))))
 
   (t/testing "no spec"
     (let [resp (h/message {:op "iced-spec-check" :symbol "files.spec.test/no-spec-func" :num-tests 10})]

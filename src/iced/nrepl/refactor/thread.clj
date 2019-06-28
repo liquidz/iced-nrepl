@@ -71,3 +71,29 @@
 
 (def thread-first (partial thread* '->))
 (def thread-last (partial thread* '->>))
+
+(defn
+  ^{:doc "Rewrites code to use `->` threading macro."
+    :requires {"code" "Code to rewrite."}
+    :optional {}
+    :returns {"code" "Rewritten code."
+              "error" "Error message if occured."
+              "status" "done"}}
+  iced-refactor-thread-first [msg]
+  (try
+    {:code (thread-first (:code msg))}
+    (catch Exception ex
+      {:status #{:done :failed} :error (.getMessage ex)})))
+
+(defn
+  ^{:doc "Rewrites code to use `->>` threading macro."
+    :requires {"code" "Code to rewrite."}
+    :optional {}
+    :returns {"code" "Rewritten code."
+              "error" "Error message if occured."
+              "status" "done"}}
+  iced-refactor-thread-last [msg]
+  (try
+    {:code (thread-last (:code msg))}
+    (catch Exception ex
+      {:status #{:done :failed} :error (.getMessage ex)})))

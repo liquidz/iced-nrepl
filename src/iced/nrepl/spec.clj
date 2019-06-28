@@ -27,7 +27,25 @@
         {:result "OK" :num-tests num-tests}
 
         (instance? Exception result)
-        {:result "NG" :num-tests num-tests :message (.getMessage result) :fail fail}
+        {:result "NG"
+         :num-tests num-tests
+         :error (.getMessage ^Exception result)
+         :failed-input fail}
 
         :else
-        {:result "NG" :num-tests num-tests :fail fail}))))
+        {:result "NG"
+         :num-tests num-tests
+         :failed-input fail}))))
+
+(defn ^{:doc "Returns the checking spec result."
+        :requires {"symbol" "Symbol to check spec."
+                   "num-tests" "Expected number of tests."}
+        :optional {}
+        :returns {"result" "'OK' or 'NG'."
+                  "num-tests" "Actual number of tests."
+                  "error" "Error message if occured."
+                  "failed-input" "The input when error occured."
+                  "status" "done"}}
+  iced-spec-check [msg]
+  (let [{sym :symbol num-tests :num-tests} msg]
+    (check (symbol sym) num-tests)))

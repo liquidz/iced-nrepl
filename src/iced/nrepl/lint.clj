@@ -3,6 +3,7 @@
             [clojure.java.shell :as shell]
             [clojure.string :as str]
             [eastwood.lint :as el]
+            [iced.nrepl.transport :as i.n.transport]
             [iced.util.namespace :as i.u.ns]))
 
 (defn- to-long [s] (Long/parseLong s))
@@ -43,7 +44,7 @@
                 column (extract :column)
                 line (extract :line)]]
       (cond-> {:msg (extract :msg)
-               :path (when-let [uri (extract :uri)]
+               :path (when-let [^java.net.URI uri (extract :uri)]
                        (.getPath uri))}
         (integer? column) (assoc :column column)
         (integer? line) (assoc :line line)))))
@@ -75,3 +76,23 @@
                    (lint-by-eastwood eastwood-linter-option)))
       (and (= env "cljs")
            (lint-by-joker file-path))))
+
+(defn
+  ^{:doc "Returns linting result for the specified file."
+    :requires {"file" "File path to lint."
+               "env" "'clj' or 'cljs'."}
+    :optional {"opt" "Eastwood linter option."}
+    :returns {"lint-warnings" "Warning results if occured."
+              "error" "Error messages if occured."
+              "status" "done"}}
+  iced-lint-file [msg]
+  (let [{:keys [file env opt]} msg
+        env (or env "clj")]
+    (try
+      (let [res (lint-file file env opt)]
+        (doseq [ls (partition-all i.n.transport/send-list-limit res)]
+          (i.n.transport/send! msg {:lint-warnings ls}))
+        (i.n.transport/send! msg {:status :done})
+        nil)
+      (catch Throwable ex
+        {:lint-warnings [] :error (.getMessage ex)}))))

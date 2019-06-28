@@ -6,13 +6,13 @@
 (def ^:private indentation-rules
   (atom fmt/default-indents))
 
-(defn- keyword->string [kw]
+(defn- keyword->string [^clojure.lang.Keyword kw]
   (str (.sym kw)))
 
 (defn- read-symbol [sym]
   (read-string (str sym)))
 
-(defn- read-keyword [kw]
+(defn- read-keyword [^clojure.lang.Keyword kw]
   (let [sym (.sym kw)]
     (cond-> sym
       (str/starts-with? (str sym) "#\"") read-symbol)))
@@ -30,7 +30,7 @@
     {:error s :line (Long/parseLong line) :column (Long/parseLong column)}
     {:error s}))
 
-(defn code [code-str alias-map]
+(defn format-code [code-str alias-map]
   (let [option {:indents @indentation-rules
                 :alias-map (medley/map-keys keyword->string alias-map)}]
     (try
@@ -60,3 +60,40 @@
         {:indent-level (- x y)})
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))
+
+(defn
+  ^{:doc "Sets indentation rules for formatting."
+    :requires {"rules" "Indentation rule map. Default rules are `cljfmt.core/default-indents`."}
+    :optional {"overwrite?" "If logical true, `cljfmt.core/default-indents` will not be used."}
+    :returns {"status" "done"}}
+  iced-set-indentation-rules [msg]
+  (let [{:keys [rules overwrite?]} msg]
+    (set-indentation-rules! rules overwrite?)
+    {:status #{:done}}))
+
+(defn ^{:doc "Formats codes by rules which is set by `iced-set-indentation-rules` op."
+        :requires {"code" "Code to format."
+                   "alias-map" "Namespace alias map."}
+        :optional {}
+        :returns {"formatted" "Formatted code."
+                  "error" "Error message if occured."
+                  "line" "Error line number if occured."
+                  "column" "Error column number if occured."
+                  "status" "done"}}
+  iced-format-code-with-indents [msg]
+  (let [{:keys [code alias-map]} msg]
+    (format-code code alias-map)))
+
+(defn ^{:doc "Returns the indentation level."
+        :requires {"code" "Code to calculate indentation level."
+                   "line-number" "Line number to calculate indentation level. This is zero-based."
+                   "alias-map" "Namespace alias map."}
+        :optional {}
+        :returns {"indent-level" "Calculated indentation level."
+                  "error" "Error message if occured."
+                  "line" "Error line number if occured."
+                  "column" "Error column number if occured."
+                  "status" "done"}}
+  iced-calculate-indent-level [msg]
+  (let [{:keys [code line-number alias-map]} msg]
+    (calcalate-indent-level code line-number alias-map)))

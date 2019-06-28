@@ -6,12 +6,10 @@
             [eastwood.lint :as el]
             [fudje.sweet :as fj]
             [iced.nrepl.lint :as sut]
-            [iced.test-helper :as h]))
+            [iced.test-helper :as h])
+  (:import java.net.URI))
 
 (t/use-fixtures :once h/repl-server-fixture)
-
-(def ^:private test-url
-  (io/as-url (io/file "project.clj")))
 
 (t/deftest lint-file-clj-success-test
   (let [path "src/iced/nrepl/lint.clj"
@@ -46,7 +44,8 @@
                                                  :warn-data {:column []
                                                              :line "invalid"
                                                              :msg "dummy"
-                                                             :uri test-url :foo "bar"}}]})]
+                                                             :uri (URI. "./project.clj")
+                                                             :foo "bar"}}]})]
     (t/is
      (compatible
       (sut/lint-by-eastwood 'dummy nil)
