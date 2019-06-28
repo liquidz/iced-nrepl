@@ -37,14 +37,13 @@ image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="h
 | `:overwrite?`
 |
 | default indentation rule is `cljfmt.core/default-indents` +
-If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be used. +
-https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
+If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be used.
 
 | iced-format-code-with-indents
 | `:code`, `:alias-map`
 |
 | `:formatted`
-| https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
+|
 
 | iced-calculate-indent-level
 | `:code`, `:line-number`, `:alias-map`
@@ -67,7 +66,7 @@ https://github.com/clojure-emacs/cider-nrepl/pull/556[WILL DEPRECATE]
 | iced-spec-check
 | `:symbol`, `:num-tests`
 |
-| `:result`, `:num-tests`, `:message` (if errored), `:fail` (if errored)
+| `:result`, `:num-tests`, `:error` (if errored), `:failed-input` (if errored)
 | `:result` is "OK" or "NG" +
 `:num-tests` must be positive integer
 
