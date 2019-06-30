@@ -1,23 +1,20 @@
 (ns iced.test-helper
-  (:require [iced.nrepl :as iced]))
-
-(if (find-ns 'clojure.tools.nrepl)
-  (require
-   '[clojure.tools.nrepl :as nrepl]
-   '[clojure.tools.nrepl.server :as server])
-  (require
-   '[nrepl.core :as nrepl]
-   '[nrepl.server :as server]))
+  (:require [iced.nrepl :as iced]
+            [nrepl.core :as nrepl]
+            [nrepl.server :as server])
+  (:import nrepl.server.Server
+           nrepl.transport.FnTransport))
 
 (def ^:dynamic *session* nil)
 
 (defn repl-server-fixture
   [f]
-  (with-open [server (server/start-server :handler (server/default-handler #'iced/wrap-iced))
-              transport (nrepl/connect :port (:port server))]
-    (let [client (nrepl/client transport Long/MAX_VALUE)]
-      (binding [*session* (nrepl/client-session client)]
-        (f)))))
+  (let [handler (server/default-handler #'iced/wrap-iced)]
+    (with-open [server ^Server (server/start-server :handler handler)
+                transport ^FnTransport (nrepl/connect :port (:port server))]
+      (let [client (nrepl/client transport Long/MAX_VALUE)]
+        (binding [*session* (nrepl/client-session client)]
+          (f))))))
 
 (defn message
   ([m] (message m true))
