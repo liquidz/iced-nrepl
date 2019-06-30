@@ -20,25 +20,25 @@
   (let [_ (h/message {:op "eval" :code "(require 'icedtest.namespace.foo.bar)"})
         _ (h/message {:op "eval" :code "(require 'icedtest.namespace.bar.baz)"})]
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.foo.bar")
-                          "iced-nrepl/test_files/icedtest/namespace/foo/bar.clj"))
+                          "/test_files/icedtest/namespace/foo/bar.clj"))
 
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.foo.baz")
-                          "iced-nrepl/test_files/icedtest/namespace/foo/baz.clj"))
+                          "/test_files/icedtest/namespace/foo/baz.clj"))
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.foo.bar-test")
-                          "iced-nrepl/test_files/icedtest/namespace/foo/bar_test.clj"))
+                          "/test_files/icedtest/namespace/foo/bar_test.clj"))
 
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.bar.baz-test")
-                          "iced-nrepl/test_files/icedtest/namespace/bar/baz_test.clj"))
+                          "/test_files/icedtest/namespace/bar/baz_test.clj"))
 
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.bar.foo-test")
-                          "iced-nrepl/test_files/icedtest/namespace/bar/foo_test.clj"))
+                          "/test_files/icedtest/namespace/bar/foo_test.clj"))
 
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.bar.foo")
-                          "iced-nrepl/test_files/icedtest/namespace/bar/foo.clj"))
+                          "/test_files/icedtest/namespace/bar/foo.clj"))
 
     (t/testing "default ns-path"
       (t/is (str/ends-with? (pseudo-ns-path "nonexisting.foo.bar")
-                            "iced-nrepl/src/nonexisting/foo/bar.clj"))
+                            "/src/nonexisting/foo/bar.clj"))
 
       (t/is (str/ends-with? (pseudo-ns-path "nonexisting.foo.bar-test")
-                            "iced-nrepl/test/nonexisting/foo/bar_test.clj")))))
+                            "/test/nonexisting/foo/bar_test.clj")))))
