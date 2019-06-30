@@ -26,6 +26,7 @@
 
   :profiles
   {:dev {:dependencies [[fudje "0.9.7"]]
+         :source-paths ["src" "test_files"]
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]

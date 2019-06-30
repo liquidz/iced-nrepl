@@ -22,7 +22,7 @@
     (t/is (not (contains? resp :lint-warnings)))))
 
 (t/deftest lint-file-clj-warning-test
-  (let [path "test/files/lint/private_never_used.clj"
+  (let [path "test_files/icedtest/lint/private_never_used.clj"
         _ (h/message {:op "load-file" :file (slurp path)})
         resp (h/message {:op "iced-lint-file"
                          :file path
@@ -81,7 +81,7 @@
     (t/is (thrown? Exception (sut/lint-by-joker "dummy file")))))
 
 (t/deftest check-file-syntax-test
-  (let [path "test/files/lint/not_closing_paren.edn"
+  (let [path "test_files/icedtest/lint/not_closing_paren.edn"
         resp (h/message {:op "iced-lint-file"
                          :file path
                          :env "clj"})
@@ -93,7 +93,7 @@
       (first warnings)
       (fj/just {:column 0 :line 3 :msg (fj/checker string?) :path path}))))
 
-  (let [path "test/files/lint/not_matched_closing_paren.edn"
+  (let [path "test_files/icedtest/lint/not_matched_closing_paren.edn"
         resp (h/message {:op "iced-lint-file"
                          :file path
                          :env "clj"})

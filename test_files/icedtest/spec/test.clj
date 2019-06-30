@@ -1,4 +1,4 @@
-(ns files.spec.test
+(ns icedtest.spec.test
    (:require [clojure.spec.alpha :as s]))
 
 (defn success-func [_] true)

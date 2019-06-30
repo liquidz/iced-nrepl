@@ -6,10 +6,10 @@
 (t/use-fixtures :once h/repl-server-fixture)
 
 (t/deftest check-test
-  (h/message {:op "load-file" :file (slurp "test/files/spec/test.clj")})
+  (h/message {:op "load-file" :file (slurp "test_files/icedtest/spec/test.clj")})
 
   (t/testing "success"
-    (let [resp (h/message {:op "iced-spec-check" :symbol "files.spec.test/success-func" :num-tests 10})]
+    (let [resp (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/success-func" :num-tests 10})]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 10 (:num-tests resp)))
       (t/is (= "OK" (:result resp)))))
@@ -17,7 +17,7 @@
   (t/testing "fail"
     (t/is
      (compatible
-      (h/message {:op "iced-spec-check" :symbol "files.spec.test/fail-func" :num-tests 10})
+      (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/fail-func" :num-tests 10})
       (fj/contains
        {:status (fj/checker #(contains? % "done"))
         :num-tests 1
@@ -26,7 +26,7 @@
         :failed-input (fj/checker any?)}))))
 
   (t/testing "no spec"
-    (let [resp (h/message {:op "iced-spec-check" :symbol "files.spec.test/no-spec-func" :num-tests 10})]
+    (let [resp (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/no-spec-func" :num-tests 10})]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 0 (:num-tests resp)))
       (t/is (= "OK" (:result resp))))))
