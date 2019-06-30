@@ -28,6 +28,7 @@
          format/iced-set-indentation-rules
          lint/iced-lint-file
          namespace/iced-project-ns-list
+         namespace/iced-pseudo-ns-path
          refactor.thread/iced-refactor-thread-first
          refactor.thread/iced-refactor-thread-last
          spec/iced-spec-check]
