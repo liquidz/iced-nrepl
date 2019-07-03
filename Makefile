@@ -26,7 +26,7 @@ coverage:
 test: .inline-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
 dev-test:
-	lein test-all
+	lein with-profile +$(VERSION) test
 
 install: .inline-deps .patch
 	lein with-profile +release,+plugin.mranderson/config install
