@@ -2,6 +2,11 @@
   (:require [clojure.test :as t]
             [iced.util.overview :as sut]))
 
+(t/deftest cut-test
+  (t/is (= 'sym (sut/cut 'sym 5)))
+  (t/is (= 'kwd (sut/cut 'kwd 5)))
+  (t/is (= 1234 (sut/cut 1234 5))))
+
 (t/deftest cut-list-test
   (t/are [in n expected] (= expected (sut/cut in n))
     '(1 2 3), 2,  '(1 2 ...)
@@ -57,6 +62,10 @@
     "",    2,  ""
     "",    0,  ""
     "",    -1, ""))
+
+(t/deftest overview-test
+  (t/is (= "foo" (sut/overview "foo")))
+  (t/is (= "fo..." (sut/overview "foo" {:max-depth 0 :max-string-length 2}))))
 
 (t/deftest overview-list-test
   (t/are [in context expected] (= expected (sut/overview in context))
