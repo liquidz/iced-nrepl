@@ -21,7 +21,9 @@ repl:
 	iced repl --without-cljs with-profile $(VERSION)
 
 coverage:
-	lein with-profile +$(VERSION) cloverage --codecov
+	lein with-profile +$(VERSION) cloverage \
+	    --codecov \
+	    --ns-exclude-regex 'icedtest\..*'
 
 test: .inline-deps .patch
 	lein with-profile +plugin.mranderson/config test-all
