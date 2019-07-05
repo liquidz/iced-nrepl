@@ -1,5 +1,6 @@
 (ns iced.nrepl
   (:require [iced.nrepl.core :as core]
+            [iced.nrepl.debug :as debug]
             [iced.nrepl.format :as format]
             [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
@@ -23,6 +24,10 @@
 
 (def iced-nrepl-ops
   (->> '[core/iced-version
+         debug/iced-list-tapped
+         debug/iced-browse-tapped
+         debug/iced-clear-tapped
+         debug/iced-complete-tapped
          format/iced-calculate-indent-level
          format/iced-format-code-with-indents
          format/iced-set-indentation-rules

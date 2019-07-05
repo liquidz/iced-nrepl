@@ -76,6 +76,30 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 | `:result` is "OK" or "NG" +
 `:num-tests` must be positive integer
 
+| iced-list-tapped
+|
+| `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
+| `:tapped`, `:error` (if errored)
+|
+
+| iced-browse-tapped
+| `keys`
+| `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
+| `:value`, `:error` (if errored)
+|
+
+| iced-complete-tapped
+| `keys`
+| `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
+| `:complete`, `:error` (if errored)
+|
+
+| iced-clear-tapped
+|
+|
+| `:result`, `:error` (if errored)
+|
+
 |===
 
 == License
