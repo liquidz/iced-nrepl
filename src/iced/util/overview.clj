@@ -9,6 +9,13 @@
    :max-set-length 20
    :max-string-length 20})
 
+(def overview-options
+  {"max-depth" "Max depth to overview data."
+   "max-list-length" "Max length to overview IPersistentList."
+   "max-vector-length" "Max length to overview IPersistentVector."
+   "max-set-length" "Max length to overview IPersistentSet."
+   "max-string-length" "Max length to overview String."})
+
 (defprotocol ICuttable ; {{{
   (cut [n x]))
 
