@@ -11,6 +11,8 @@
 (def ^:private datafy' (resolve 'clojure.core.protocols/datafy))
 (def ^:private add-tap' (resolve 'clojure.core/add-tap))
 (def ^:private remove-tap' (resolve 'clojure.core/remove-tap))
+(def ^:private tap-not-supported-msg
+  "Tap is not supported in the Clojure version you are using. Please use Clojure 1.10.0 or later.")
 
 (def supported?
   (every? some? [datafy' add-tap' remove-tap']))
@@ -59,7 +61,7 @@
                   "status" "done"}}
   iced-list-tapped [msg]
   (if-not supported?
-    {:error "not supported"}
+    {:error tap-not-supported-msg}
     (let [option (extract-overview-option msg)]
       {:tapped (map #(str (i.u.overview/overview % option)) @tapped)})))
 
@@ -71,7 +73,7 @@
                   "status" "done"}}
   iced-browse-tapped [msg]
   (if-not supported?
-    {:error "not supported"}
+    {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
                   (map convert-key))
           options (extract-overview-option msg)]
@@ -89,7 +91,7 @@
                   "status" "done"}}
   iced-complete-tapped [msg]
   (if-not supported?
-    {:error "not supported"}
+    {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
                   (map convert-key))]
       (try
@@ -107,7 +109,7 @@
                   "status" "done"}}
   iced-clear-tapped [_]
   (if-not supported?
-    {:error "not supported"}
+    {:error tap-not-supported-msg}
     (do (reset! tapped [])
         {:result "OK"})))
 ; vim:fdm=marker:fdl=0
