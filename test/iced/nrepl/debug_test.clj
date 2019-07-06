@@ -79,4 +79,4 @@
                 "iced-complete-tapped"]]
       (let [resp (h/message {:op op})]
         (t/is (contains? (:status resp) "done"))
-        (t/is (= "not supported" (:error resp)))))))
+        (t/is (str/includes? (:error resp) "not supported"))))))
