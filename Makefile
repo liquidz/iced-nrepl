@@ -10,10 +10,13 @@ inline-deps.patch:
 	\rm -rf target.org && \cp -pir target target.org
 	touch .inline-deps
 
-.patch:
+.patch: inline-deps.patch
 	\rm -rf target && \cp -pir target.org target
 	(cd target && patch -p1 < ../inline-deps.patch)
 	touch .patch
+
+test_files/clojuredocs-export.json:
+	curl -o $@ https://clojuredocs.org/clojuredocs-export.json
 
 deps: .inline-deps .patch
 
@@ -25,9 +28,9 @@ coverage:
 	    --codecov \
 	    --ns-exclude-regex 'icedtest\..*'
 
-test: .inline-deps .patch
+test: .inline-deps .patch test_files/clojuredocs-export.json
 	lein with-profile +plugin.mranderson/config test-all
-dev-test:
+dev-test: test_files/clojuredocs-export.json
 	lein with-profile +$(VERSION) test
 
 install: .inline-deps .patch
@@ -43,4 +46,4 @@ deploy: .inline-deps .patch
 
 clean:
 	lein clean
-	\rm -f .inline-deps .patch
+	\rm -f .inline-deps .patch test_files/clojuredocs-export.json

@@ -1,6 +1,7 @@
 (ns iced.nrepl
   (:require [iced.nrepl.core :as core]
             [iced.nrepl.debug :as debug]
+            [iced.nrepl.document :as document]
             [iced.nrepl.format :as format]
             [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
@@ -28,6 +29,8 @@
          debug/iced-browse-tapped
          debug/iced-clear-tapped
          debug/iced-complete-tapped
+         document/iced-find-clojuredocs
+         document/iced-update-clojuredocs
          format/iced-calculate-indent-level
          format/iced-format-code-with-indents
          format/iced-set-indentation-rules
