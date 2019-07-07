@@ -8,7 +8,7 @@
 
 (defn fail-func [_] true)
 (s/fdef fail-func
-        :args (s/cat :_ any?)
+        :args (s/cat :_ boolean?)
         :ret string?)
 
 (defn no-spec-func [] true)

@@ -10,6 +10,11 @@
               'clojure.spec.test
               'clojure.test.check.generators)
 
+(defn- convert-failed-input [failed-input]
+  ;; NOTE: failed-input
+  ;;       [[arg1-1, arg1-2], [arg2-1, arg2-2], ...]
+  (mapv #(mapv pr-str %) failed-input))
+
 (defmacro stest [fname & args]
   `(when-let [f# (or (resolve (symbol "clojure.spec.test.alpha" ~fname))
                      (resolve (symbol "clojure.spec.test" ~fname)))]
@@ -30,12 +35,12 @@
         {:result "NG"
          :num-tests num-tests
          :error (.getMessage ^Exception result)
-         :failed-input fail}
+         :failed-input (convert-failed-input fail)}
 
         :else
         {:result "NG"
          :num-tests num-tests
-         :failed-input fail}))))
+         :failed-input (convert-failed-input fail)}))))
 
 (defn ^{:doc "Returns the checking spec result."
         :requires {"symbol" "Symbol to check spec."
