@@ -71,17 +71,19 @@
 (t/deftest overview-list-test
   (t/are [in context expected] (= expected (sut/overview in context))
     '(1 2 3 4),   {},                   '(1 2 3 4)
+    '(1 nil 3),   {},                   '(1 nil 3)
     '(1 2 (3 4)), {},                   '(1 2 (3 ...))
     '(),          {},                   '()
     '(1 2 (3 4)), {:max-depth 0},       '(1 ...)
     '(1),         {:max-depth 0},       '(1)
     '(1 2 (3 4)), {:max-depth 2},       '(1 2 (3 4))
     '(1 2 (3 4)), {:max-list-length 2}, '(1 2 ...)
-    '(1 2 ),      {:max-list-length 2}, '(1 2)))
+    '(1 2),       {:max-list-length 2}, '(1 2)))
 
 (t/deftest overview-vector-test
   (t/are [in context expected] (= expected (sut/overview in context))
     [1 2 3 4],   {},                     '[1 2 3 4]
+    [1 nil 3],   {},                     '[1 nil 3]
     [1 2 [3 4]], {},                     '[1 2 [3 ...]]
     [],          {},                     '[]
     [1 2 [3 4]], {:max-depth 0},         '[1 ...]
@@ -93,6 +95,7 @@
 (t/deftest overview-map-test
   (t/are [in context expected] (= expected (sut/overview in context))
     {:a 1 :b 2 :c 3},           {},                  {:a 1 :b 2 :c 3}
+    {:a 1 :b nil},              {},                  {:a 1 :b nil}
     {:a 1 :b 2 :c {:d 3 :e 4}}, {},                  {:a 1 :b 2 :c {:d 3 'etc '...}}
     {},                         {},                  {}
     {:a 1 :b 2 :c {:d 3 :e 4}}, {:max-depth 0},      {:a 1 'etc '...}
@@ -104,6 +107,7 @@
 (t/deftest overview-set-test
   (t/are [in context expected] (contains? expected (sut/overview in context))
     #{1 2 3},      {},                  #{#{1 2 3}}
+    #{1 nil 3},    {},                  #{#{1 nil 3}}
     #{1 2 #{3 4}}, {},                  #{#{1 2 #{3 '...}}
                                           #{1 2 #{4 '...}}}
     #{},           {},                  #{#{}}
