@@ -1,4 +1,4 @@
-.PHONY: patch deps repl test install release deploy clean
+.PHONY: deps repl coverage test dev-test install dev-install release deploy clean
 
 VERSION := 1.10.1
 
@@ -39,7 +39,7 @@ release:
 	lein with-profile +release release
 
 deploy: .inline-deps .patch
-	lein with-profile +$(VERSION),+plugin.mranderson/config deploy clojars
+	lein with-profile +release,+plugin.mranderson/config deploy clojars
 
 clean:
 	lein clean
