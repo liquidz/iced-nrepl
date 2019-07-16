@@ -4,38 +4,52 @@
 #
 version: 2
 
-_job-body: &job-body
-  working_directory: ~/repo
-  environment:
-    LEIN_ROOT: "true"
-    JVM_OPTS: -Xmx3200m
-
-  steps:
-    - checkout
-    - run: sudo apt-get install -y make patch
-    - restore_cache:
-        keys:
-        - v2-dependencies-{{ checksum "project.clj" }}
-    - run: make deps
-    - save_cache:
-        paths:
-          - ~/.m2
-          - .inline-deps
-          - target/srcdeps
-          - target.org/srcdeps
-        key: v2-dependencies-{{ checksum "project.clj" }}
-    - run: make test
-
 jobs:
   java8:
     docker:
       - image: circleci/clojure:openjdk-8-lein
-    <<: *job-body
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run: sudo apt-get install -y make patch
+      - restore_cache:
+          keys:
+          - v2-java8-dependencies-{{ checksum "project.clj" }}
+      - run: make deps
+      - save_cache:
+          paths:
+            - ~/.m2
+            - .inline-deps
+            - target/srcdeps
+            - target.org/srcdeps
+          key: v2-java8-dependencies-{{ checksum "project.clj" }}
+      - run: make test
 
   java11:
     docker:
       - image: circleci/clojure:openjdk-11-lein
-    <<: *job-body
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run: sudo apt-get install -y make patch
+      - restore_cache:
+          keys:
+          - v2-java11-dependencies-{{ checksum "project.clj" }}
+      - run: make deps
+      - save_cache:
+          paths:
+            - ~/.m2
+            - .inline-deps
+            - target/srcdeps
+            - target.org/srcdeps
+          key: v2-java11-dependencies-{{ checksum "project.clj" }}
+      - run: make test
 
   coverage:
     docker:
