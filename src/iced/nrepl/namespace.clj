@@ -43,10 +43,14 @@
          (sort-by first)
          (map second))))
 
+(defn- ns-path [ns-sym]
+  (when-let [^java.net.URL src (o.ns/canonical-source ns-sym)]
+    (.getFile src)))
+
 (defn- pseudo-ns-path [ns-name]
   (let [{:keys [user-dir file-sep]} (get-props)
         near-ns-name (first (find-near-ns-names ns-name))
-        near-ns-path (some-> near-ns-name symbol o.ns/ns-path)
+        near-ns-path (some-> near-ns-name symbol ns-path)
         near-ns-ext (or (some->> near-ns-path (re-seq #"clj[sc]?$") first) "clj")]
     (when-let [i (and near-ns-path
                       (str/starts-with? near-ns-path user-dir)
@@ -67,6 +71,6 @@
                   "path" "Pseudo namespace path"}}
   iced-pseudo-ns-path [msg]
   (let [{ns-name :ns} msg]
-    {:path (or (o.ns/ns-path (symbol ns-name))
+    {:path (or (ns-path (symbol ns-name))
                (pseudo-ns-path ns-name)
                (default-ns-path ns-name))}))
