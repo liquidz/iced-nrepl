@@ -8,8 +8,6 @@
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/test.check "0.10.0"
                                :exclusions [org.clojure/clojure]]
-                 ^:inline-dep [org.clojure/tools.namespace "0.3.1"
-                               :exclusions [org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.5.0"]
                  ^:inline-dep [cljfmt "0.6.4"
                                :exclusions [org.clojure/clojure
