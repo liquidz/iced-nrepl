@@ -24,7 +24,7 @@
     (subs ns-name 0 i)))
 
 (defn- find-near-ns-name [base-ns-name ns-name]
-  (let [ns-name' (ns-drop-last ns-name)]
+  (when-let [ns-name' (ns-drop-last ns-name)]
     (->> (iterate ns-drop-last base-ns-name)
          (drop 1)
          (take-while some?)
