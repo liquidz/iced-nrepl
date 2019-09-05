@@ -38,9 +38,6 @@
     (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.bar.foo")
                           "/test_files/icedtest/namespace/bar/foo.clj"))
 
-    (t/is (str/ends-with? (pseudo-ns-path "icedtest.namespace.foo.baz-test")
-                          "/test_files/icedtest/namespace/bar/foo.clj"))
-
     (t/testing "default ns-path"
       (t/is (str/ends-with? (pseudo-ns-path "nonexisting.foo.bar")
                             "/src/nonexisting/foo/bar.clj"))
