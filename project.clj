@@ -15,8 +15,6 @@
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
-                 ^:inline-dep [jonase/eastwood "0.3.6"
-                               :exclusions [org.clojure/clojure]]
                  ^:inline-dep [medley "1.2.0"
                                :exclusions [org.clojure/clojure]]]
 
