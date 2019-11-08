@@ -2,20 +2,11 @@
 
 VERSION := 1.10.1
 
-inline-deps.patch:
-	diff -uprN target.org/srcdeps target.new/srcdeps > inline-deps.patch
-
 .inline-deps:
 	lein inline-deps
-	\rm -rf target.org && \cp -pir target target.org
 	touch .inline-deps
 
-.patch:
-	\rm -rf target && \cp -pir target.org target
-	(cd target && patch -p1 < ../inline-deps.patch)
-	touch .patch
-
-deps: .inline-deps .patch
+deps: .inline-deps
 
 repl:
 	iced repl --without-cljs with-profile $(VERSION)
@@ -25,12 +16,12 @@ coverage:
 	    --codecov \
 	    --ns-exclude-regex 'icedtest\..*'
 
-test: .inline-deps .patch
+test: .inline-deps
 	lein with-profile +plugin.mranderson/config test-all
 dev-test:
 	lein with-profile +$(VERSION) test
 
-install: .inline-deps .patch
+install: .inline-deps
 	lein with-profile +release,+plugin.mranderson/config install
 dev-install:
 	lein with-profile +release install
@@ -38,9 +29,9 @@ dev-install:
 release:
 	lein with-profile +release release
 
-deploy: .inline-deps .patch
+deploy: .inline-deps
 	lein with-profile +release,+plugin.mranderson/config deploy clojars
 
 clean:
 	lein clean
-	\rm -f .inline-deps .patch
+	\rm -f .inline-deps

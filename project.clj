@@ -1,4 +1,4 @@
-(defproject iced-nrepl "0.6.7-SNAPSHOT"
+(defproject iced-nrepl "0.7.0-SNAPSHOT"
   :description "nREPL middleware for vim-iced"
   :url "https://github.com/liquidz/iced-nrepl"
   :license {:name "Eclipse Public License"
@@ -15,8 +15,6 @@
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
-                 ^:inline-dep [jonase/eastwood "0.3.6"
-                               :exclusions [org.clojure/clojure]]
                  ^:inline-dep [medley "1.2.0"
                                :exclusions [org.clojure/clojure]]]
 

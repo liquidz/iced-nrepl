@@ -2,7 +2,6 @@
   (:require [iced.nrepl.core :as core]
             [iced.nrepl.debug :as debug]
             [iced.nrepl.format :as format]
-            [iced.nrepl.lint :as lint]
             [iced.nrepl.namespace :as namespace]
             [iced.nrepl.refactor.thread :as refactor.thread]
             [iced.nrepl.spec :as spec]
@@ -31,7 +30,6 @@
          format/iced-calculate-indent-level
          format/iced-format-code-with-indents
          format/iced-set-indentation-rules
-         lint/iced-lint-file
          namespace/iced-project-ns-list
          namespace/iced-pseudo-ns-path
          refactor.thread/iced-refactor-thread-first
