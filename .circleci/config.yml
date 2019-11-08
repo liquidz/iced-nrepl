@@ -4,14 +4,17 @@
 #
 version: 2
 
+defaults: &defaults
+  working_directory: ~/repo
+  environment:
+    LEIN_ROOT: "true"
+    JVM_OPTS: -Xmx3200m
+
 jobs:
   java8:
     docker:
-      - image: circleci/clojure:openjdk-8-lein
-    working_directory: ~/repo
-    environment:
-      LEIN_ROOT: "true"
-      JVM_OPTS: -Xmx3200m
+      - image: circleci/clojure:openjdk-8-lein-2.9.1
+    <<: *defaults
     steps:
       - checkout
       - run: sudo apt-get install -y make patch
@@ -30,11 +33,8 @@ jobs:
 
   java11:
     docker:
-      - image: circleci/clojure:openjdk-11-lein
-    working_directory: ~/repo
-    environment:
-      LEIN_ROOT: "true"
-      JVM_OPTS: -Xmx3200m
+      - image: circleci/clojure:openjdk-11-lein-2.9.1
+    <<: *defaults
     steps:
       - checkout
       - run: sudo apt-get install -y make patch
@@ -51,9 +51,29 @@ jobs:
           key: v2-java11-dependencies-{{ checksum "project.clj" }}
       - run: make test
 
+  java13:
+    docker:
+      - image: circleci/clojure:openjdk-13-lein-2.9.1-buster
+    <<: *defaults
+    steps:
+      - checkout
+      - run: sudo apt-get install -y make patch
+      - restore_cache:
+          keys:
+          - v2-java13-dependencies-{{ checksum "project.clj" }}
+      - run: make deps
+      - save_cache:
+          paths:
+            - ~/.m2
+            - .inline-deps
+            - target/srcdeps
+            - target.org/srcdeps
+          key: v2-java11-dependencies-{{ checksum "project.clj" }}
+      - run: make test
+
   coverage:
     docker:
-      - image: circleci/clojure:openjdk-11-lein
+      - image: circleci/clojure:openjdk-13-lein-2.9.1-buster
     steps:
       - checkout
       - restore_cache:
@@ -72,10 +92,12 @@ workflows:
     jobs:
       - java8
       - java11
+      - java13
       - coverage:
           requires:
             - java8
             - java11
+            - java13
           filters:
             branches:
               only: master
