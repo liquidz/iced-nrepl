@@ -11,7 +11,7 @@
                  ^:inline-dep [org.clojure/tools.namespace "0.3.1" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.5.4"]
-                 ^:inline-dep [cljfmt "0.6.4"
+                 ^:inline-dep [cljfmt "0.6.5"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
