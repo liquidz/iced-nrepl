@@ -51,6 +51,12 @@
                            :max-string-length 2})]
       (t/is (contains? (:status resp) "done"))
       (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}}]"
+               (str/trim (str/join "" (:value resp))))))
+
+    (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" "/" "md=10" "msl=5"]
+                           :max-string-length 2})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= "[:bar {:baz {:hello \"abc\", :world \"def\"}}]"
                (str/trim (str/join "" (:value resp))))))))
 
 (t/deftest complete-tapped-test

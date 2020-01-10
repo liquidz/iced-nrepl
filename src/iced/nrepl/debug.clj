@@ -38,10 +38,27 @@
 
     :else k))
 
+(defn parse-option-string [s]
+  (let [[k v] (str/split s #"=" 2)
+        value (Long/parseLong v)]
+    (case k
+      ("max-depth" "md") [:max-depth value]
+      ("max-string-length" "msl") [:max-string-length value]
+      ("max-list-length" "mll") [:max-list-length value]
+      ("max-vector-length" "mvl") [:max-vector-length value]
+      ("max-set-length" "mSl") [:max-set-length value]
+      ("max-map-length" "mml") [:max-map-length value]
+      nil)))
+
 (defn- browse-in
   ([coll ks] (browse-in coll ks {}))
   ([coll ks option]
-   (i.u.overview/overview (get-in* coll ks) option)))
+   (let [[ks [_ & opts]] (split-with #(not= % "/") ks)
+         option (->> opts
+                     (map parse-option-string)
+                     (into {})
+                     (merge option))]
+     (i.u.overview/overview (get-in* coll ks) option))))
 
 (defn- extract-candidates [x]
   (condp #(instance? %1 %2) x
