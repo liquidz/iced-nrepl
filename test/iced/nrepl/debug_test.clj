@@ -25,10 +25,10 @@
           tapped (get resp :tapped [])]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 4 (count tapped)))
-      (t/is (= ["1"
-                "hello"
+      (t/is (= ["{:foo 1, :bar {:baz \"abc...\"}}"
                 "[\"foo\" \"bar\" ...]"
-                "{:foo 1, :bar {:baz \"abc...\"}}"]
+                "hello"
+                "1"]
                tapped)))
 
     (h/message {:op "iced-clear-tapped"})
