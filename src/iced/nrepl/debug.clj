@@ -100,6 +100,34 @@
         (catch Exception ex
           {:error (.getMessage ex)})))))
 
+(defn- extract-children [x]
+  (letfn [(wrap-child [name has-children?]
+            {:name (str name) :has-children? (str has-children?)})]
+    (condp #(instance? %1 %2) x
+      clojure.lang.IPersistentMap (map #(wrap-child % true) (keys x))
+      clojure.lang.IPersistentList (->> x count range (map #(wrap-child % true)))
+      clojure.lang.IPersistentVector (->> x count range (map #(wrap-child % true)))
+      (if (nil? x)
+        []
+        [(wrap-child x false)]))))
+
+(defn ^{:doc "Fetches tapped values and returns its child elements."
+        :requires {"keys" "Keys to fetch tapped values."}
+        :optional {}
+        :returns {"children" "The fetched value."
+                  "error" "If occured."
+                  "status" "done"}}
+  iced-fetch-tapped-children
+  [msg]
+  (if-not supported?
+    {:error tap-not-supported-msg}
+    (let [ks (->> (get msg :keys [])
+                  (map convert-key))]
+      (try
+        {:children (-> @tapped (get-in* ks) extract-children)}
+        (catch Exception ex
+          {:error (.getMessage ex)})))))
+
 (defn ^{:doc "Completes a key for browsing tapped values."
         :requires {"keys" "Keys to browse tapped values."}
         :optional {}

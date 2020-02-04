@@ -81,6 +81,12 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 | `:value`, `:error` (if errored)
 |
 
+| iced-fetch-tapped-children
+| `keys`
+|
+| `:children`, `:error` (if errored)
+|
+
 | iced-complete-tapped
 | `keys`
 | `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`

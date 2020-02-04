@@ -59,6 +59,35 @@
       (t/is (= "[:bar {:baz {:hello \"abc\", :world \"def\"}}]"
                (str/trim (str/join "" (:value resp))))))))
 
+(t/deftest fetch-tapped-children-test
+  (when sut/supported?
+    (h/message {:op "iced-clear-tapped"})
+
+    (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}]})
+    (Thread/sleep 500)
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name ":foo" :has-children? "true"}] (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 ":foo"]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "0" :has-children? "true"}
+                {:name "1" :has-children? "true"}]
+               (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 ":foo" 0]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name ":bar" :has-children? "false"}] (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 ":foo" 1 ":baz" ":world"]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "def" :has-children? "false"}] (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 ":invalid"]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [] (:children resp))))))
+
 (t/deftest complete-tapped-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
