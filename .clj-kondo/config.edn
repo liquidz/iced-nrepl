@@ -1,0 +1,19 @@
+{
+ :linters {:unresolved-symbol
+           {:exclude [(clojure.test/is [compatible])
+                      set-descriptor!]}
+
+           :unused-namespace
+           {:exclude [iced.nrepl.core
+                      iced.nrepl.debug
+                      iced.nrepl.format
+                      iced.nrepl.namespace
+                      iced.nrepl.refactor.thread
+                      iced.nrepl.spec]}
+
+           :unsorted-namespaces
+           {:level :error}}
+
+ :output {:exclude-files
+          ["src/iced/nrepl/transport.clj"]}
+ }
