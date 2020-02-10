@@ -2,7 +2,9 @@
 
 https://github.com/nrepl/nREPL[nREPL] middleware to support https://github.com/liquidz/vim-iced[vim-iced].
 
-image:https://img.shields.io/circleci/project/github/liquidz/iced-nrepl/master.svg["CircleCI", link="https://circleci.com/gh/liquidz/iced-nrepl"]
+
+image:https://github.com/liquidz/iced-nrepl/workflows/build/badge.svg["GitHub Actions for build workflow", link="https://github.com/liquidz/iced-nrepl/actions?query=workflow%3Abuild"]
+image:https://github.com/liquidz/iced-nrepl/workflows/lint/badge.svg["GitHub Actions for lint workflow", link="https://github.com/liquidz/iced-nrepl/actions?query=workflow%3Alint"]
 image:https://versions.deps.co/liquidz/iced-nrepl/status.svg["Dependencies Status", link="https://versions.deps.co/liquidz/iced-nrepl"]
 image:https://codecov.io/gh/liquidz/iced-nrepl/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/liquidz/iced-nrepl"]
 image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="https://clojars.org/iced-nrepl"]
@@ -103,7 +105,7 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 
 == License
 
-Copyright © 2018-2019 https://twitter.com/uochan[Masashi Iizuka]
+Copyright © 2018-2020 https://twitter.com/uochan[Masashi Iizuka]
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
