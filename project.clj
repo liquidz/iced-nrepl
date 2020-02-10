@@ -1,4 +1,4 @@
-(defproject iced-nrepl "0.7.1"
+(defproject iced-nrepl "0.7.2-SNAPSHOT"
   :description "nREPL middleware for vim-iced"
   :url "https://github.com/liquidz/iced-nrepl"
   :license {:name "Eclipse Public License"
