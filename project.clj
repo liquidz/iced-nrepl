@@ -10,7 +10,7 @@
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "0.3.1" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
-                 ^:inline-dep [cider/orchard "0.5.5"]
+                 ^:inline-dep [cider/orchard "0.5.6"]
                  ;; NOTE: 0.6.5 or later has a performance issue
                  ;;       https://github.com/weavejester/cljfmt/issues/181
                  ^:inline-dep [cljfmt "0.6.4"
