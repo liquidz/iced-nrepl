@@ -51,13 +51,59 @@
                            :max-string-length 2})]
       (t/is (contains? (:status resp) "done"))
       (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}}]"
-               (str/trim (str/join "" (:value resp))))))
-
-    (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" "/" "md=10" "msl=5"]
-                           :max-string-length 2})]
-      (t/is (contains? (:status resp) "done"))
-      (t/is (= "[:bar {:baz {:hello \"abc\", :world \"def\"}}]"
                (str/trim (str/join "" (:value resp))))))))
+
+(defn- test-browse-tapped [ks]
+  (some->> (h/message {:op "iced-browse-tapped" :keys ks})
+           :value
+           (str/join "")
+           str/trim))
+
+(t/deftest browse-tapped-option-test
+  (when sut/supported?
+    (h/message {:op "iced-clear-tapped"})
+    (tap>' {:foo {:c :d :e :f :g :h}})
+    (tap>' {:foo #{:a :b}})
+    (tap>' {:foo [5 6 7 8]})
+    (tap>' {:foo (list 1 2 3 4)})
+    (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}]})
+    (Thread/sleep 500)
+
+    (t/testing "max-depth"
+      (t/is (= "[:bar {:baz {:hello \"abc\", etc ...}}]"
+               (test-browse-tapped [0 ":foo"])))
+      (t/is (= "[:bar {:baz {:hello \"abc\", :world \"def\"}}]"
+               (test-browse-tapped [0 ":foo" "/" "md=10"]))))
+
+    (t/testing "max-string-length"
+      (t/is (= "[:bar {:baz {:hello \"abc\", etc ...}}]"
+               (test-browse-tapped [0 ":foo"])))
+      (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}}]"
+               (test-browse-tapped [0 ":foo" "/" "msl=2"]))))
+
+    (t/testing "max-list-length"
+      (t/is (= "(1 2 3 4)"
+               (test-browse-tapped [1 ":foo"])))
+      (t/is (= "(1 2 ...)"
+               (test-browse-tapped [1 ":foo" "/" "mll=2"]))))
+
+    (t/testing "max-vector-length"
+      (t/is (= "[5 6 7 8]"
+               (test-browse-tapped [2 ":foo"])))
+      (t/is (= "[5 6 ...]"
+               (test-browse-tapped [2 ":foo" "/" "mvl=2"]))))
+
+    (t/testing "max-set-length"
+      (t/is (contains? #{"#{:a :b}" "#{:b :a}"}
+                       (test-browse-tapped [3 ":foo"])))
+      (t/is (contains? #{"#{:a ...}" "#{:b ...}"}
+                       (test-browse-tapped [3 ":foo" "/" "mSl=1"]))))
+
+    (t/testing "max-map-length"
+      (t/is (= "{:c :d, :e :f, :g :h}"
+               (test-browse-tapped [4 ":foo"])))
+      (t/is (= "{:c :d, :e :f, etc ...}"
+               (test-browse-tapped [4 ":foo" "/" "mml=2"]))))))
 
 (t/deftest fetch-tapped-children-test
   (when sut/supported?
