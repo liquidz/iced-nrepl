@@ -1,7 +1,7 @@
 (ns iced.nrepl.format-test
   (:require [clojure.string :as str]
             [clojure.test :as t]
-            [fudje.sweet :as fj]
+            [esac.core :as esac]
             [iced.nrepl.format :as sut]
             [iced.test-helper :as h]
             [medley.core :as medley]))
@@ -29,10 +29,11 @@
 
     (t/is (> (count rules) 3))
     (t/is
-     (compatible
-      rules
-      (fj/contains {'foo [[:block 1]]
-                    'bar/baz [[:block 2] [:inner 1]]})))
+      (esac/match?
+        rules
+        {'foo [[:block 1]]
+         'bar/baz [[:block 2] [:inner 1]]}))
+
     (let [[_ v] (medley/find-first #(reg= #"^icedtest" (first %)) rules)]
       (t/is (= [[:inner 0]] v)))))
 

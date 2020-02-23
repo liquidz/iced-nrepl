@@ -25,7 +25,7 @@
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles
-  {:dev {:dependencies [[fudje "0.9.7"]]
+  {:dev {:dependencies [[esac "0.1.0-SNAPSHOT"]]
          :source-paths ["src" "test_files"]
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
