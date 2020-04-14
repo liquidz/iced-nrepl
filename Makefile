@@ -11,6 +11,9 @@ deps: .inline-deps
 repl:
 	iced repl --without-cljs with-profile $(VERSION)
 
+lint:
+	clj-kondo --lint src:test
+
 coverage:
 	lein with-profile +$(VERSION) cloverage \
 	    --codecov \
