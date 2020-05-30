@@ -1,9 +1,9 @@
 (ns iced.nrepl.spec-test
-  (:require [clojure.spec.test.alpha :as st]
-            [clojure.test :as t]
-            [esac.core :as esac]
-            [iced.nrepl.spec :as sut]
-            [iced.test-helper :as h]))
+  (:require
+   [clojure.spec.test.alpha :as st]
+   [clojure.test :as t]
+   [iced.nrepl.spec :as sut]
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -20,14 +20,12 @@
       (t/is (= "OK" (:result resp)))))
 
   (t/testing "fail"
-    (t/is
-      (esac/match?
-        (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/fail-func" :num-tests 10})
-        {:status done?
-         :num-tests 1
-         :result "NG"
-         :error string?
-         :failed-input any?})))
+    (let [resp (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/fail-func" :num-tests 10})]
+      (t/is (done? (:status resp)))
+      (t/is (= 1 (:num-tests resp)))
+      (t/is (= "NG" (:result resp)))
+      (t/is (string? (:error resp)))
+      (t/is (some? (:failed-input resp)))))
 
   (t/testing "no spec"
     (let [resp (h/message {:op "iced-spec-check" :symbol "icedtest.spec.test/no-spec-func" :num-tests 10})]

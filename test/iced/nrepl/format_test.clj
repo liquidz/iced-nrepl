@@ -1,7 +1,6 @@
 (ns iced.nrepl.format-test
   (:require [clojure.string :as str]
             [clojure.test :as t]
-            [esac.core :as esac]
             [iced.nrepl.format :as sut]
             [iced.test-helper :as h]
             [medley.core :as medley]))
@@ -28,11 +27,8 @@
     (t/is (contains? (:status resp) "done"))
 
     (t/is (> (count rules) 3))
-    (t/is
-      (esac/match?
-        rules
-        {'foo [[:block 1]]
-         'bar/baz [[:block 2] [:inner 1]]}))
+    (t/is (= [[:block 1]] (get rules 'foo)))
+    (t/is (= [[:block 2] [:inner 1]] (get rules 'bar/baz)))
 
     (let [[_ v] (medley/find-first #(reg= #"^icedtest" (first %)) rules)]
       (t/is (= [[:inner 0]] v)))))
