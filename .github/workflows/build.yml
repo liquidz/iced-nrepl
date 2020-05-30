@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Cache m2
-        uses: actions/cache@v1.1.0
+        uses: actions/cache@v2
         with:
           path: /root/.m2
           key: root-m2-${{ hashFiles('project.clj') }}
