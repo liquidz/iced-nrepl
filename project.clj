@@ -31,7 +31,8 @@
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]
    :1.10.1 [:dev {:dependencies [[org.clojure/clojure "1.10.1"]]}]
 
-   :release {:dependencies [[org.clojure/clojure "1.10.1"]]}}
+   :release {:dependencies [[org.clojure/clojure "1.10.1"]]}
+   :antq {:dependencies [[antq "RELEASE"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]

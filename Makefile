@@ -1,4 +1,4 @@
-.PHONY: deps repl coverage test dev-test install dev-install release deploy clean
+.PHONY: deps repl coverage test dev-test install dev-install release deploy outdated clean
 
 VERSION := 1.10.1
 
@@ -34,6 +34,9 @@ release:
 
 deploy: .inline-deps
 	lein with-profile +release,+plugin.mranderson/config deploy clojars
+
+outdated:
+	lein with-profile +antq run -m antq.core
 
 clean:
 	lein clean
