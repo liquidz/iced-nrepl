@@ -1,9 +1,11 @@
 (ns iced.test-helper
-  (:require [iced.nrepl :as iced]
-            [nrepl.core :as nrepl]
-            [nrepl.server :as server])
-  (:import nrepl.server.Server
-           nrepl.transport.FnTransport))
+  (:require
+   [iced.nrepl :as iced]
+   [nrepl.core :as nrepl]
+   [nrepl.server :as server])
+  (:import
+   nrepl.server.Server
+   nrepl.transport.FnTransport))
 
 (def ^:dynamic *session* nil)
 

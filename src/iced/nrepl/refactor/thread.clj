@@ -1,5 +1,6 @@
 (ns iced.nrepl.refactor.thread
-  (:require [clojure.string :as str]))
+  (:require
+   [clojure.string :as str]))
 
 (def ^:private replace-prefix "__ICED__")
 
@@ -27,7 +28,8 @@
         (recur target (conj expanded {:head head :tail tail}))
         (conj expanded {:value x})))))
 
-(defn- construct [sym expanded]
+(defn- construct
+  [sym expanded]
   (let [[value & bodies] (reverse expanded)]
     (if bodies
       (cons sym
@@ -36,27 +38,32 @@
                     [(:value value)] bodies))
       (:value value))))
 
-(defn- lambda-replace-pair [code]
+(defn- lambda-replace-pair
+  [code]
   (reduce (fn [res x]
             (assoc res x (str "(" replace-prefix (subs x 2))))
           {} (re-seq #"#\([^ )]+" code)))
 
-(defn- deref-replace-pair [code]
+(defn- deref-replace-pair
+  [code]
   (reduce (fn [res x]
             (assoc res x (if (str/starts-with? x "@(")
                            (str "(" replace-prefix (subs x 2))
                            (str replace-prefix (subs x 1)))))
           {} (re-seq #"@[^ )]+" code)))
 
-(defn- apply-replace-pairs [code pairs]
+(defn- apply-replace-pairs
+  [code pairs]
   (reduce (fn [res [before after]] (str/replace res before after))
           code pairs))
 
-(defn- rollback-replace-pairs [code pairs]
+(defn- rollback-replace-pairs
+  [code pairs]
   (reduce (fn [res [before after]] (str/replace res after before))
           code pairs))
 
-(defn- thread* [sym code]
+(defn- thread*
+  [sym code]
   (let [replace-pairs (merge (lambda-replace-pair code)
                              (deref-replace-pair code))
         code' (apply-replace-pairs code replace-pairs)
@@ -72,27 +79,27 @@
 (def thread-first (partial thread* '->))
 (def thread-last (partial thread* '->>))
 
-(defn
-  ^{:doc "Rewrites code to use `->` threading macro."
-    :requires {"code" "Code to rewrite."}
-    :optional {}
-    :returns {"code" "Rewritten code."
-              "error" "Error message if occured."
-              "status" "done"}}
-  iced-refactor-thread-first [msg]
+(defn ^{:doc "Rewrites code to use `->` threading macro."
+        :requires {"code" "Code to rewrite."}
+        :optional {}
+        :returns {"code" "Rewritten code."
+                  "error" "Error message if occured."
+                  "status" "done"}}
+  iced-refactor-thread-first
+  [msg]
   (try
     {:code (thread-first (:code msg))}
     (catch Exception ex
       {:status #{:done :failed} :error (.getMessage ex)})))
 
-(defn
-  ^{:doc "Rewrites code to use `->>` threading macro."
-    :requires {"code" "Code to rewrite."}
-    :optional {}
-    :returns {"code" "Rewritten code."
-              "error" "Error message if occured."
-              "status" "done"}}
-  iced-refactor-thread-last [msg]
+(defn ^{:doc "Rewrites code to use `->>` threading macro."
+        :requires {"code" "Code to rewrite."}
+        :optional {}
+        :returns {"code" "Rewritten code."
+                  "error" "Error message if occured."
+                  "status" "done"}}
+  iced-refactor-thread-last
+  [msg]
   (try
     {:code (thread-last (:code msg))}
     (catch Exception ex

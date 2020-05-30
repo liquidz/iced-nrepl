@@ -1,6 +1,7 @@
 (ns iced.nrepl.spec)
 
-(defn- try-requires [& syms]
+(defn- try-requires
+  [& syms]
   (try
     (doseq [sym syms]
       (require sym))
@@ -10,17 +11,20 @@
               'clojure.spec.test
               'clojure.test.check.generators)
 
-(defn- convert-failed-input [failed-input]
+(defn- convert-failed-input
+  [failed-input]
   ;; NOTE: failed-input
   ;;       [[arg1-1, arg1-2], [arg2-1, arg2-2], ...]
   (mapv #(mapv pr-str %) failed-input))
 
-(defmacro stest [fname & args]
+(defmacro stest
+  [fname & args]
   `(when-let [f# (or (resolve (symbol "clojure.spec.test.alpha" ~fname))
                      (resolve (symbol "clojure.spec.test" ~fname)))]
      (f# ~@args)))
 
-(defn check [sym num-tests]
+(defn check
+  [sym num-tests]
   (when-let [test-results (stest "check" sym {:clojure.spec.test.check/opts {:num-tests num-tests}})]
     (let [ret (-> test-results first :clojure.spec.test.check/ret)
           {:keys [result num-tests fail]} ret]
@@ -51,6 +55,7 @@
                   "error" "Error message if occured."
                   "failed-input" "The input when error occured."
                   "status" "done"}}
-  iced-spec-check [msg]
+  iced-spec-check
+  [msg]
   (let [{sym :symbol num-tests :num-tests} msg]
     (check (symbol sym) num-tests)))

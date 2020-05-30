@@ -1,8 +1,9 @@
 (ns iced.nrepl.debug-test
-  (:require [clojure.string :as str]
-            [clojure.test :as t]
-            [iced.nrepl.debug :as sut]
-            [iced.test-helper :as h]))
+  (:require
+   [clojure.string :as str]
+   [clojure.test :as t]
+   [iced.nrepl.debug :as sut]
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -53,7 +54,8 @@
       (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}}]"
                (str/trim (str/join "" (:value resp))))))))
 
-(defn- test-browse-tapped [ks]
+(defn- test-browse-tapped
+  [ks]
   (some->> (h/message {:op "iced-browse-tapped" :keys ks})
            :value
            (str/join "")

@@ -42,5 +42,4 @@
                   ["vcs" "commit"]
                   ["vcs" "push"]]
 
-  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.1" "test"]]}
-  )
+  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.1" "test"]]})

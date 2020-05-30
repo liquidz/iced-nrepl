@@ -1,6 +1,7 @@
 (ns iced.nrepl.core-test
-  (:require [clojure.test :as t]
-            [iced.test-helper :as h]))
+  (:require
+   [clojure.test :as t]
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 

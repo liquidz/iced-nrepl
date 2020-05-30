@@ -1,9 +1,10 @@
 (ns iced.nrepl.namespace-test
-  (:require [clojure.string :as str]
-            [clojure.test :as t]
-            [iced.nrepl.namespace :as sut]
-            [iced.test-helper :as h]
-            [orchard.namespace :as o.ns]))
+  (:require
+   [clojure.string :as str]
+   [clojure.test :as t]
+   [iced.nrepl.namespace :as sut]
+   [iced.test-helper :as h]
+   [orchard.namespace :as o.ns]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -13,8 +14,9 @@
       (t/is (contains? (:status resp) "done"))
       (t/is (sequential? (:project-ns-list resp))))))
 
-(defn- pseudo-ns-path [ns-name]
-   (let [resp (h/message {:op "iced-pseudo-ns-path" :ns ns-name})]
+(defn- pseudo-ns-path
+  [ns-name]
+  (let [resp (h/message {:op "iced-pseudo-ns-path" :ns ns-name})]
     (t/is (contains? (:status resp) "done"))
     (:path resp)))
 

@@ -1,29 +1,35 @@
 (ns iced.nrepl.namespace
-  (:require [clojure.string :as str]
-            [orchard.namespace :as o.ns]))
+  (:require
+   [clojure.string :as str]
+   [orchard.namespace :as o.ns]))
 
 (defn ^{:doc "Returns all namespaces in the project."
         :requires {}
         :optional {}
         :returns {"project-ns-list" "Namespace names."
                   "status" "done"}}
-  iced-project-ns-list [_msg]
+  iced-project-ns-list
+  [_msg]
   {:project-ns-list (o.ns/project-namespaces)})
 
-(defn- get-props []
+(defn- get-props
+  []
   {:user-dir (System/getProperty "user.dir")
    :file-sep (System/getProperty "file.separator")})
 
-(defn- ns-name->path [ns-name]
+(defn- ns-name->path
+  [ns-name]
   (-> ns-name
       (str/replace "." (:file-sep (get-props)))
       (str/replace "-" "_")))
 
-(defn- ns-drop-last [ns-name]
+(defn- ns-drop-last
+  [ns-name]
   (when-let [i (str/last-index-of ns-name ".")]
     (subs ns-name 0 i)))
 
-(defn- find-near-ns-name [base-ns-name ns-name]
+(defn- find-near-ns-name
+  [base-ns-name ns-name]
   (when-let [ns-name' (ns-drop-last ns-name)]
     (->> (iterate ns-drop-last base-ns-name)
          (drop 1)
@@ -33,7 +39,8 @@
                  (when (str/starts-with? ns-name' base-ns-name')
                    [priority ns-name]))))))
 
-(defn- find-near-ns-names [base-ns-name]
+(defn- find-near-ns-names
+  [base-ns-name]
   (let [filter-test-ns-fn (if (str/ends-with? base-ns-name "-test")
                             filter remove)
         project-ns-names (map str (o.ns/project-namespaces))]
@@ -43,11 +50,13 @@
          (sort-by first)
          (map second))))
 
-(defn- ns-path [ns-sym]
+(defn- ns-path
+  [ns-sym]
   (when-let [^java.net.URL src (o.ns/canonical-source ns-sym)]
     (.getFile src)))
 
-(defn- pseudo-ns-path [ns-name]
+(defn- pseudo-ns-path
+  [ns-name]
   (let [{:keys [user-dir file-sep]} (get-props)
         near-ns-name (first (find-near-ns-names ns-name))
         near-ns-path (some-> near-ns-name symbol ns-path)
@@ -59,7 +68,8 @@
         (str (str/join file-sep (conj [user-dir subdir] (ns-name->path ns-name)))
              "." near-ns-ext)))))
 
-(defn- default-ns-path [ns-name]
+(defn- default-ns-path
+  [ns-name]
   (let [{:keys [user-dir file-sep]} (get-props)
         subdir (if (str/ends-with? ns-name "-test") "test" "src")]
     (str user-dir file-sep subdir file-sep (ns-name->path ns-name) ".clj")))
@@ -69,7 +79,8 @@
         :optional {}
         :returns {"status" "done"
                   "path" "Pseudo namespace path"}}
-  iced-pseudo-ns-path [msg]
+  iced-pseudo-ns-path
+  [msg]
   (let [{ns-name :ns} msg]
     {:path (or (ns-path (symbol ns-name))
                (pseudo-ns-path ns-name)

@@ -1,11 +1,12 @@
 (ns iced.nrepl
-  (:require [iced.nrepl.core :as core]
-            [iced.nrepl.debug :as debug]
-            [iced.nrepl.format :as format]
-            [iced.nrepl.namespace :as namespace]
-            [iced.nrepl.refactor.thread :as refactor.thread]
-            [iced.nrepl.spec :as spec]
-            [iced.nrepl.transport :as transport]))
+  (:require
+   [iced.nrepl.core :as core]
+   [iced.nrepl.debug :as debug]
+   [iced.nrepl.format :as format]
+   [iced.nrepl.namespace :as namespace]
+   [iced.nrepl.refactor.thread :as refactor.thread]
+   [iced.nrepl.spec :as spec]
+   [iced.nrepl.transport :as transport]))
 
 (if (find-ns 'clojure.tools.nrepl)
   (require
@@ -13,7 +14,8 @@
   (require
    '[nrepl.middleware :refer [set-descriptor!]]))
 
-(defn- transform-ops [sym]
+(defn- transform-ops
+  [sym]
   (let [v (resolve sym)
         m (meta v)
         op-name (name sym)]
@@ -39,7 +41,8 @@
        (map transform-ops)
        (into {})))
 
-(defn wrap-iced [handler]
+(defn wrap-iced
+  [handler]
   (fn [{:keys [op] :as msg}]
     (if-let [f (get-in iced-nrepl-ops [op :handler])]
       (when-let [res (f msg)]

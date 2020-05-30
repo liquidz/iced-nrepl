@@ -1,9 +1,10 @@
 (ns iced.nrepl.format-test
-  (:require [clojure.string :as str]
-            [clojure.test :as t]
-            [iced.nrepl.format :as sut]
-            [iced.test-helper :as h]
-            [medley.core :as medley]))
+  (:require
+   [clojure.string :as str]
+   [clojure.test :as t]
+   [iced.nrepl.format :as sut]
+   [iced.test-helper :as h]
+   [medley.core :as medley]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -13,7 +14,8 @@
      :bar/baz "[[:block 2] [:inner 1]]"
      reg "[[:inner 0]]"}))
 
-(defn- reg= [& regexps]
+(defn- reg=
+  [& regexps]
   (and (every? #(instance? java.util.regex.Pattern %) regexps)
        (apply = (map str regexps))))
 

@@ -1,6 +1,7 @@
 (ns iced.util.overview-test
-  (:require [clojure.test :as t]
-            [iced.util.overview :as sut]))
+  (:require
+   [clojure.test :as t]
+   [iced.util.overview :as sut]))
 
 (t/deftest cut-test
   (t/is (= nil (sut/cut nil 5)))
@@ -89,7 +90,7 @@
     [1 2 [3 4]], {:max-depth 0},         '[1 ...]
     [1],         {:max-depth 0},         '[1]
     [1 2 [3 4]], {:max-depth 2},         '[1 2 [3 4]]
-    [1 2 [3 4]], {:max-vector-length 2}, '[1 2 ... ]
+    [1 2 [3 4]], {:max-vector-length 2}, '[1 2 ...]
     [1 2],       {:max-vector-length 2}, '[1 2]))
 
 (t/deftest overview-map-test

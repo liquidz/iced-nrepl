@@ -7,7 +7,8 @@
 
 (t/use-fixtures :once h/repl-server-fixture)
 
-(defn- done? [statuses]
+(defn- done?
+  [statuses]
   (contains? statuses "done"))
 
 (t/deftest check-test

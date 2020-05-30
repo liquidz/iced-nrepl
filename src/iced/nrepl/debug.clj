@@ -1,7 +1,8 @@
 (ns iced.nrepl.debug
-  (:require [clojure.pprint :as pprint]
-            [clojure.string :as str]
-            [iced.util.overview :as i.u.overview]))
+  (:require
+   [clojure.pprint :as pprint]
+   [clojure.string :as str]
+   [iced.util.overview :as i.u.overview]))
 
 (try (require 'clojure.core.protocols)
      (catch Exception _ nil))
@@ -17,18 +18,21 @@
 (def supported?
   (every? some? [datafy' add-tap' remove-tap']))
 
-(defn- catch-tapped! [x]
+(defn- catch-tapped!
+  [x]
   (and datafy' (swap! tapped #(cons (datafy' x) %))))
 
 (when supported?
   (remove-tap' #'catch-tapped!)
   (add-tap' #'catch-tapped!))
 
-(defn- get-in* [coll ks]
+(defn- get-in*
+  [coll ks]
   (reduce (fn [acc k]
             ((if (integer? k) nth get) acc k)) coll ks))
 
-(defn- convert-key [k]
+(defn- convert-key
+  [k]
   (cond
     (and (string? k) (str/starts-with? k ":"))
     (keyword (subs k 1))
@@ -38,7 +42,8 @@
 
     :else k))
 
-(defn parse-option-string [s]
+(defn parse-option-string
+  [s]
   (let [[k v] (str/split s #"=" 2)
         value (Long/parseLong v)]
     (case k
@@ -60,14 +65,16 @@
                      (merge option))]
      (i.u.overview/overview (get-in* coll ks) option))))
 
-(defn- extract-candidates [x]
+(defn- extract-candidates
+  [x]
   (condp #(instance? %1 %2) x
     clojure.lang.IPersistentMap (map str (keys x))
     clojure.lang.IPersistentList (range (count x))
     clojure.lang.IPersistentVector (range (count x))
     []))
 
-(defn- extract-overview-option [msg]
+(defn- extract-overview-option
+  [msg]
   (select-keys msg (keys i.u.overview/default-overview-context)))
 
 (defn ^{:doc "Returns tapped values."
@@ -76,7 +83,8 @@
         :returns {"tapped" "Tapped values converted to String."
                   "error" "If occured."
                   "status" "done"}}
-  iced-list-tapped [msg]
+  iced-list-tapped
+  [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [option (extract-overview-option msg)]
@@ -88,7 +96,8 @@
         :returns {"value" "The browsed value."
                   "error" "If occured."
                   "status" "done"}}
-  iced-browse-tapped [msg]
+  iced-browse-tapped
+  [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
@@ -100,8 +109,10 @@
         (catch Exception ex
           {:error (.getMessage ex)})))))
 
-(defn- extract-children [x]
-  (letfn [(wrap-child [name has-children?]
+(defn- extract-children
+  [x]
+  (letfn [(wrap-child
+            [name has-children?]
             {:name (str name) :has-children? (str has-children?)})]
     (condp #(instance? %1 %2) x
       clojure.lang.IPersistentMap (map #(wrap-child % true) (keys x))
@@ -134,7 +145,8 @@
         :returns {"complete" "Completion results."
                   "error" "If occured."
                   "status" "done"}}
-  iced-complete-tapped [msg]
+  iced-complete-tapped
+  [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
@@ -152,7 +164,8 @@
         :returns {"result" "OK"
                   "error" "If occured."
                   "status" "done"}}
-  iced-clear-tapped [_]
+  iced-clear-tapped
+  [_]
   (if-not supported?
     {:error tap-not-supported-msg}
     (do (reset! tapped [])

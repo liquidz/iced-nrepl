@@ -1,23 +1,28 @@
 (ns iced.nrepl.format
-  (:require [cljfmt.core :as fmt]
-            [clojure.string :as str]
-            [medley.core :as medley]))
+  (:require
+   [cljfmt.core :as fmt]
+   [clojure.string :as str]
+   [medley.core :as medley]))
 
 (def ^:private indentation-rules
   (atom fmt/default-indents))
 
-(defn- keyword->string [^clojure.lang.Keyword kw]
+(defn- keyword->string
+  [^clojure.lang.Keyword kw]
   (str (.sym kw)))
 
-(defn- read-symbol [sym]
+(defn- read-symbol
+  [sym]
   (read-string (str sym)))
 
-(defn- read-keyword [^clojure.lang.Keyword kw]
+(defn- read-keyword
+  [^clojure.lang.Keyword kw]
   (let [sym (.sym kw)]
     (cond-> sym
       (str/starts-with? (str sym) "#\"") read-symbol)))
 
-(defn set-indentation-rules! [rules overwrite?]
+(defn set-indentation-rules!
+  [rules overwrite?]
   (let [default-indents (if overwrite? {} fmt/default-indents)]
     (->> rules
          (reduce (fn [res [k v]]
@@ -25,12 +30,14 @@
                  default-indents)
          (reset! indentation-rules))))
 
-(defn- parse-error-message [s]
+(defn- parse-error-message
+  [s]
   (if-let [[[_ line column]] (re-seq #"at line (\d+), column (\d+)" s)]
     {:error s :line (Long/parseLong line) :column (Long/parseLong column)}
     {:error s}))
 
-(defn format-code [code-str alias-map]
+(defn format-code
+  [code-str alias-map]
   (let [option {:indents @indentation-rules
                 :alias-map (medley/map-keys keyword->string alias-map)}]
     (try
@@ -38,7 +45,8 @@
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))
 
-(defn calcalate-indent-level [code-str cursor-line-number alias-map]
+(defn calcalate-indent-level
+  [code-str cursor-line-number alias-map]
   (let [option {:indents @indentation-rules
                 :alias-map (medley/map-keys keyword->string alias-map)
                 :remove-consecutive-blank-lines? false
@@ -61,12 +69,12 @@
       (catch Exception ex
         (parse-error-message (.getMessage ex))))))
 
-(defn
-  ^{:doc "Sets indentation rules for formatting."
-    :requires {"rules" "Indentation rule map. Default rules are `cljfmt.core/default-indents`."}
-    :optional {"overwrite?" "If logical true, `cljfmt.core/default-indents` will not be used."}
-    :returns {"status" "done"}}
-  iced-set-indentation-rules [msg]
+(defn ^{:doc "Sets indentation rules for formatting."
+        :requires {"rules" "Indentation rule map. Default rules are `cljfmt.core/default-indents`."}
+        :optional {"overwrite?" "If logical true, `cljfmt.core/default-indents` will not be used."}
+        :returns {"status" "done"}}
+  iced-set-indentation-rules
+  [msg]
   (let [{:keys [rules overwrite?]} msg]
     (set-indentation-rules! rules overwrite?)
     {:status #{:done}}))
@@ -80,7 +88,8 @@
                   "line" "Error line number if occured."
                   "column" "Error column number if occured."
                   "status" "done"}}
-  iced-format-code-with-indents [msg]
+  iced-format-code-with-indents
+  [msg]
   (let [{:keys [code alias-map]} msg]
     (format-code code alias-map)))
 
@@ -94,6 +103,7 @@
                   "line" "Error line number if occured."
                   "column" "Error column number if occured."
                   "status" "done"}}
-  iced-calculate-indent-level [msg]
+  iced-calculate-indent-level
+  [msg]
   (let [{:keys [code line-number alias-map]} msg]
     (calcalate-indent-level code line-number alias-map)))

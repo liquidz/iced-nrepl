@@ -1,0 +1,6 @@
+{
+ :list-indent-size 1
+ :insert-padding-lines? false
+ :file-ignore #{"target"}
+ }
+; vim:ft=clojure

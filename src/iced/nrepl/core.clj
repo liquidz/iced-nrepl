@@ -1,6 +1,7 @@
 (ns iced.nrepl.core)
 
-(defn version []
+(defn version
+  []
   (-> (slurp "project.clj")
       read-string
       (nth 2)))
@@ -10,5 +11,6 @@
         :optional {}
         :returns {"version" "The version of iced-nrepl-middleware."
                   "status" "done"}}
-  iced-version [_]
+  iced-version
+  [_]
   {:version (version)})

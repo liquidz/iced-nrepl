@@ -1,16 +1,19 @@
 (ns iced.nrepl.refactor.thread-test
-  (:require [clojure.string :as str]
-            [clojure.test :as t]
-            [iced.test-helper :as h]))
+  (:require
+   [clojure.string :as str]
+   [clojure.test :as t]
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
-(defn- thread-first [code]
+(defn- thread-first
+  [code]
   (let [resp (h/message {:op "iced-refactor-thread-first" :code code})]
     (t/is (contains? (:status resp) "done"))
     (:code resp)))
 
-(defn- thread-last [code]
+(defn- thread-last
+  [code]
   (let [resp (h/message {:op "iced-refactor-thread-last" :code code})]
     (t/is (contains? (:status resp) "done"))
     (:code resp)))

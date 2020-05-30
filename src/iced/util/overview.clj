@@ -1,5 +1,6 @@
 (ns iced.util.overview
-  (:require [medley.core :as medley]))
+  (:require
+   [medley.core :as medley]))
 
 (def default-overview-context
   {:depth 0

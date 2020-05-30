@@ -10,6 +10,7 @@
 
 (def send-list-limit 50)
 
-(defn send! [msg m]
+(defn send!
+  [msg m]
   (let [{:keys [transport]} msg]
     (transport/send transport (response-for msg m))))
