@@ -6,14 +6,12 @@
   :dependencies [[nrepl "0.7.0"]
                  ^:inline-dep [org.clojure/data.json "1.0.0"
                                :exclusions [org.clojure/clojure]]
-                 ^:inline-dep [org.clojure/test.check "1.0.0"
+                 ^:inline-dep [org.clojure/test.check "1.1.0"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "1.0.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
-                 ^:inline-dep [cider/orchard "0.5.10"]
-                 ;; NOTE: 0.6.5 or later has a performance issue
-                 ;;       https://github.com/weavejester/cljfmt/issues/181
-                 ^:inline-dep [cljfmt "0.6.4"
+                 ^:inline-dep [cider/orchard "0.5.11"]
+                 ^:inline-dep [cljfmt "0.6.8"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
