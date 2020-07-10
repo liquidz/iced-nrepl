@@ -6,7 +6,7 @@
   :dependencies [[nrepl "0.7.0"]
                  ^:inline-dep [org.clojure/data.json "1.0.0"
                                :exclusions [org.clojure/clojure]]
-                 ^:inline-dep [org.clojure/test.check "1.0.0"
+                 ^:inline-dep [org.clojure/test.check "1.1.0"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "1.0.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
