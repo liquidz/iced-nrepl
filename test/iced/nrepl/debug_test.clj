@@ -26,10 +26,10 @@
           tapped (get resp :tapped [])]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 4 (count tapped)))
-      (t/is (= ["{:foo 1, :bar {:baz \"abc...\"}}"
-                "[\"foo\" \"bar\" ...]"
+      (t/is (= ["1"
                 "hello"
-                "1"]
+                "[\"foo\" \"bar\" ...]"
+                "{:foo 1, :bar {:baz \"abc...\"}}"]
                tapped)))
 
     (h/message {:op "iced-clear-tapped"})
@@ -64,11 +64,11 @@
 (t/deftest browse-tapped-option-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
-    (tap>' {:foo {:c :d :e :f :g :h}})
-    (tap>' {:foo #{:a :b}})
-    (tap>' {:foo [5 6 7 8]})
-    (tap>' {:foo (list 1 2 3 4)})
     (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}]})
+    (tap>' {:foo (list 1 2 3 4)})
+    (tap>' {:foo [5 6 7 8]})
+    (tap>' {:foo #{:a :b}})
+    (tap>' {:foo {:c :d :e :f :g :h}})
     (Thread/sleep 500)
 
     (t/testing "max-depth"
@@ -135,6 +135,24 @@
     (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 ":invalid"]})]
       (t/is (contains? (:status resp) "done"))
       (t/is (= [] (:children resp))))))
+
+(t/deftest fetch-tapped-children-lazyseq-test
+  (when sut/supported?
+    (h/message {:op "iced-clear-tapped"})
+
+    (tap>' (map #(str % "!") (range 2)))
+    (Thread/sleep 500)
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "0" :has-children? "true"}
+                {:name "1" :has-children? "true"}]
+               (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 1]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "1!" :has-children? "false"}]
+               (:children resp))))))
 
 (t/deftest complete-tapped-test
   (when sut/supported?

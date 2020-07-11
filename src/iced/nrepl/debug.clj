@@ -20,7 +20,7 @@
 
 (defn- catch-tapped!
   [x]
-  (and datafy' (swap! tapped #(cons (datafy' x) %))))
+  (and datafy' (swap! tapped conj (datafy' x))))
 
 (when supported?
   (remove-tap' #'catch-tapped!)
@@ -118,6 +118,7 @@
       clojure.lang.IPersistentMap (map #(wrap-child % true) (keys x))
       clojure.lang.IPersistentList (->> x count range (map #(wrap-child % true)))
       clojure.lang.IPersistentVector (->> x count range (map #(wrap-child % true)))
+      clojure.lang.LazySeq (->> x count range (map #(wrap-child % true)))
       (if (nil? x)
         []
         [(wrap-child x false)]))))
