@@ -136,6 +136,24 @@
       (t/is (contains? (:status resp) "done"))
       (t/is (= [] (:children resp))))))
 
+(t/deftest fetch-tapped-children-lazyseq-test
+  (when sut/supported?
+    (h/message {:op "iced-clear-tapped"})
+
+    (tap>' (map #(str % "!") (range 2)))
+    (Thread/sleep 500)
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "0" :has-children? "true"}
+                {:name "1" :has-children? "true"}]
+               (:children resp))))
+
+    (let [resp (h/message {:op "iced-fetch-tapped-children" :keys [0 1]})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [{:name "1!" :has-children? "false"}]
+               (:children resp))))))
+
 (t/deftest complete-tapped-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
