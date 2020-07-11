@@ -26,10 +26,10 @@
           tapped (get resp :tapped [])]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 4 (count tapped)))
-      (t/is (= ["{:foo 1, :bar {:baz \"abc...\"}}"
-                "[\"foo\" \"bar\" ...]"
+      (t/is (= ["1"
                 "hello"
-                "1"]
+                "[\"foo\" \"bar\" ...]"
+                "{:foo 1, :bar {:baz \"abc...\"}}"]
                tapped)))
 
     (h/message {:op "iced-clear-tapped"})
@@ -64,11 +64,11 @@
 (t/deftest browse-tapped-option-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
-    (tap>' {:foo {:c :d :e :f :g :h}})
-    (tap>' {:foo #{:a :b}})
-    (tap>' {:foo [5 6 7 8]})
-    (tap>' {:foo (list 1 2 3 4)})
     (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}]})
+    (tap>' {:foo (list 1 2 3 4)})
+    (tap>' {:foo [5 6 7 8]})
+    (tap>' {:foo #{:a :b}})
+    (tap>' {:foo {:c :d :e :f :g :h}})
     (Thread/sleep 500)
 
     (t/testing "max-depth"
