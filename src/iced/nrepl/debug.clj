@@ -20,7 +20,7 @@
 
 (defn- catch-tapped!
   [x]
-  (and datafy' (swap! tapped #(cons (datafy' x) %))))
+  (and datafy' (swap! tapped conj (datafy' x))))
 
 (when supported?
   (remove-tap' #'catch-tapped!)
