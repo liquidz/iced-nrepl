@@ -19,7 +19,7 @@
                                :exclusions [org.clojure/clojure]]]
 
   :plugins [[thomasa/mranderson "0.5.1"]
-            [lein-cloverage "1.1.2"]]
+            [lein-cloverage "1.2.0"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles
