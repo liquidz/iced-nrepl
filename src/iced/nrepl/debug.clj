@@ -40,6 +40,15 @@
     (and (string? k) (str/starts-with? k "'"))
     (symbol (subs k 1))
 
+    (and (string? k) (#{"true" "false" "nil"} k))
+    (case k
+      "true" true
+      "false" false
+      nil)
+
+    (string? k)
+    (str/replace k #"(^\"|\"$)" "")
+
     :else k))
 
 (defn parse-option-string
@@ -65,10 +74,18 @@
                      (merge option))]
      (i.u.overview/overview (get-in* coll ks) option))))
 
+(defn- key->str
+  [x]
+  (cond
+    (string? x) (str \" x \")
+    (boolean? x) (str x)
+    (nil? x) "nil"
+    :else (str x)))
+
 (defn- extract-candidates
   [x]
   (condp #(instance? %1 %2) x
-    clojure.lang.IPersistentMap (map str (keys x))
+    clojure.lang.IPersistentMap (map key->str (keys x))
     clojure.lang.IPersistentList (range (count x))
     clojure.lang.IPersistentVector (range (count x))
     []))

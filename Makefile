@@ -36,7 +36,7 @@ deploy: .inline-deps
 	lein with-profile +release,+plugin.mranderson/config deploy clojars
 
 outdated:
-	lein with-profile +antq run -m antq.core --exclude 'nrepl/nrepl'
+	lein with-profile +antq run -m antq.core
 
 clean:
 	lein clean
