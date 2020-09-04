@@ -40,19 +40,50 @@
 (t/deftest browse-tapped-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
-    (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}]})
+    (tap>' {:foo [:bar {:baz {:hello "abc" :world "def"}}
+                  {true "bool true"
+                   false "bool false"
+                   "true" "string true"
+                   nil "null"}]})
     (Thread/sleep 500)
 
     (let [resp (h/message {:op "iced-browse-tapped" :keys [0]
                            :max-string-length 2})]
       (t/is (contains? (:status resp) "done"))
-      (t/is (= "{:foo [:bar ...]}" (str/trim (str/join "" (:value resp))))))
+      (t/is (= "{:foo [:bar ...]}"
+               (str/trim (str/join "" (:value resp))))))
 
     (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo"]
                            :max-string-length 2})]
       (t/is (contains? (:status resp) "done"))
-      (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}}]"
-               (str/trim (str/join "" (:value resp))))))))
+      (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}} {true \"bo...\", etc ...}]"
+               (str/trim (str/join "" (:value resp))))))
+
+    (t/testing "bool"
+      (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" 2 "true"]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "\"bool true\""
+                 (str/trim (str/join "" (:value resp))))))
+
+      (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" 2 "false"]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "\"bool false\""
+                 (str/trim (str/join "" (:value resp))))))
+
+      (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" 2 "\"true\""]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "\"string true\""
+                 (str/trim (str/join "" (:value resp)))))))
+
+    (t/testing "nil"
+      (let [resp (h/message {:op "iced-browse-tapped" :keys [0 ":foo" 2 "nil"]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "\"null\""
+                 (str/trim (str/join "" (:value resp)))))))))
 
 (defn- test-browse-tapped
   [ks]

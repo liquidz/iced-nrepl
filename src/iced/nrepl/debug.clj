@@ -40,6 +40,15 @@
     (and (string? k) (str/starts-with? k "'"))
     (symbol (subs k 1))
 
+    (and (string? k) (#{"true" "false" "nil"} k))
+    (case k
+      "true" true
+      "false" false
+      nil)
+
+    (string? k)
+    (str/replace k #"(^\"|\"$)" "")
+
     :else k))
 
 (defn parse-option-string
