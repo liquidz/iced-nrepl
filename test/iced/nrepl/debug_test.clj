@@ -188,12 +188,17 @@
 (t/deftest complete-tapped-test
   (when sut/supported?
     (h/message {:op "iced-clear-tapped"})
-    (tap>' {:foo [:bar 0] :baz "hello"})
+    (tap>' {:foo [:bar 0] :baz "hello"
+            true 1
+            false 2
+            "true" 3
+            nil 4})
     (Thread/sleep 500)
 
     (let [resp (h/message {:op "iced-complete-tapped" :keys [0]})]
       (t/is (contains? (:status resp) "done"))
-      (t/is (= [":foo" ":baz"] (:complete resp))))
+      (t/is (= [":foo" ":baz" "true" "false" "\"true\"" "nil"]
+               (:complete resp))))
 
     (let [resp (h/message {:op "iced-complete-tapped" :keys [0 ":foo"]})]
       (t/is (contains? (:status resp) "done"))

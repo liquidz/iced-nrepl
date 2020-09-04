@@ -74,10 +74,18 @@
                      (merge option))]
      (i.u.overview/overview (get-in* coll ks) option))))
 
+(defn- key->str
+  [x]
+  (cond
+    (string? x) (str \" x \")
+    (boolean? x) (str x)
+    (nil? x) "nil"
+    :else (str x)))
+
 (defn- extract-candidates
   [x]
   (condp #(instance? %1 %2) x
-    clojure.lang.IPersistentMap (map str (keys x))
+    clojure.lang.IPersistentMap (map key->str (keys x))
     clojure.lang.IPersistentList (range (count x))
     clojure.lang.IPersistentVector (range (count x))
     []))
