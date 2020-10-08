@@ -11,7 +11,8 @@
                  ^:inline-dep [org.clojure/tools.namespace "1.0.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.6.1"]
-                 ^:inline-dep [cljfmt "0.7.0"
+                 ;; TODO cljfmt 0.7.0 seems to be failed
+                 ^:inline-dep [cljfmt "0.6.8"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
