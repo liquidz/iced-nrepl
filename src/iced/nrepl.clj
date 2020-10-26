@@ -29,6 +29,7 @@
          debug/iced-browse-tapped
          debug/iced-fetch-tapped-children
          debug/iced-clear-tapped
+         debug/iced-delete-tapped
          debug/iced-complete-tapped
          format/iced-calculate-indent-level
          format/iced-format-code-with-indents

@@ -237,3 +237,34 @@
       (let [resp (h/message {:op op})]
         (t/is (contains? (:status resp) "done"))
         (t/is (str/includes? (:error resp) "not supported"))))))
+
+(t/deftest delete-test
+  (when sut/supported?
+    (h/message {:op "iced-clear-tapped"})
+    (t/is (empty? (:tapped (h/message {:op "iced-list-tapped"}))))
+
+    (tap>' 1)
+    (tap>' 2)
+    (tap>' 3)
+    (tap>' 4)
+    (Thread/sleep 500)
+
+    (let [tapped (:tapped (h/message {:op "iced-list-tapped"}))]
+      (t/is (= 4 (count tapped)))
+      (t/is (= ["1" "2" "3" "4"] (map :value tapped)))
+
+      (t/testing "delete by index"
+        (t/is (= "OK" (:result (h/message {:op "iced-delete-tapped"
+                                           :key 1}))))
+        (t/is (= ["1" "3" "4"]
+                 (->> (h/message {:op "iced-list-tapped"})
+                      :tapped
+                      (map :value)))))
+
+      (t/testing "delete by unique-id"
+        (t/is (= "OK" (:result (h/message {:op "iced-delete-tapped"
+                                           :key (:unique-id (nth tapped 2))}))))
+        (t/is (= ["1" "4"]
+                 (->> (h/message {:op "iced-list-tapped"})
+                      :tapped
+                      (map :value))))))))

@@ -204,4 +204,20 @@
     {:error tap-not-supported-msg}
     (do (reset! tapped [])
         {:result "OK"})))
-; vim:fdm=marker:fdl=0
+
+(defn ^{:doc "Delete the specified tapped value."
+        :requires {"key" "The key you'd like to delete"}
+        :optional {}
+        :returns {"result" "OK"
+                  "error" "If occured."
+                  "status" "done"}}
+  iced-delete-tapped
+  [{target-key :key}]
+  (if-not supported?
+    {:error tap-not-supported-msg}
+    (do (reset! tapped
+                (if (integer? target-key)
+                  (vec (concat (take target-key @tapped)
+                               (drop (inc target-key) @tapped)))
+                  (vec (remove #(= target-key (:unique-id %)) @tapped))))
+        {:result "OK"})))
