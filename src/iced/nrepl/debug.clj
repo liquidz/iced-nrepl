@@ -111,7 +111,7 @@
         :requires {}
         :optional i.u.overview/overview-options
         :returns {"tapped" "Tapped values converted to String."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-list-tapped
   [msg]
@@ -127,7 +127,7 @@
         :requires {"keys" "Keys to browse tapped values."}
         :optional i.u.overview/overview-options
         :returns {"value" "The browsed value."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-browse-tapped
   [msg]
@@ -160,7 +160,7 @@
         :requires {"keys" "Keys to fetch tapped values."}
         :optional {}
         :returns {"children" "The fetched value."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-fetch-tapped-children
   [msg]
@@ -177,7 +177,7 @@
         :requires {"keys" "Keys to browse tapped values."}
         :optional {}
         :returns {"complete" "Completion results."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-complete-tapped
   [msg]
@@ -196,7 +196,7 @@
         :requires {}
         :optional {}
         :returns {"result" "OK"
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-clear-tapped
   [_]
@@ -209,7 +209,7 @@
         :requires {"key" "The key you'd like to delete"}
         :optional {}
         :returns {"result" "OK"
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-delete-tapped
   [{target-key :key}]

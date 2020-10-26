@@ -49,19 +49,19 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 | iced-calculate-indent-level
 | `:code`, `:line-number`, `:alias-map`
 |
-| `:indent-level`, `:error` (if occured)
+| `:indent-level`, `:error` (if occurred)
 | `:line-number` is zero-based
 
 | iced-refactor-thread-first
 | `:code`
 |
-| `:code`, `:error` (if occured)
+| `:code`, `:error` (if occurred)
 |
 
 | iced-refactor-thread-last
 | `:code`
 |
-| `:code`, `:error` (if occured)
+| `:code`, `:error` (if occurred)
 |
 
 | iced-spec-check
