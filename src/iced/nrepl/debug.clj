@@ -20,7 +20,8 @@
 
 (defn- catch-tapped!
   [x]
-  (and datafy' (swap! tapped conj (datafy' x))))
+  (and datafy' (swap! tapped conj {:unique-id (str (java.util.UUID/randomUUID))
+                                   :content (datafy' x)})))
 
 (when supported?
   (remove-tap' #'catch-tapped!)
@@ -50,6 +51,18 @@
     (str/replace k #"(^\"|\"$)" "")
 
     :else k))
+
+(defn- convert-keys
+  [[first-key & rest-keys]]
+  ;; First key must be index(Integer) or unique-id(String)
+  (let [index (if (integer? first-key)
+                first-key
+                (reduce (fn [idx item]
+                          (if (= first-key (:unique-id item))
+                            (reduced idx)
+                            (inc idx)))
+                        0 @tapped))]
+    (concat [index :content] (map convert-key rest-keys))))
 
 (defn parse-option-string
   [s]
@@ -98,27 +111,30 @@
         :requires {}
         :optional i.u.overview/overview-options
         :returns {"tapped" "Tapped values converted to String."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-list-tapped
   [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [option (extract-overview-option msg)]
-      {:tapped (map #(str (i.u.overview/overview % option)) @tapped)})))
+      {:tapped (map (fn [{:keys [unique-id content]}]
+                      {:unique-id unique-id
+                       :value (str (i.u.overview/overview content option))})
+                    @tapped)})))
 
 (defn ^{:doc "Browses tapped values and returns the value."
         :requires {"keys" "Keys to browse tapped values."}
         :optional i.u.overview/overview-options
         :returns {"value" "The browsed value."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-browse-tapped
   [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))
+                  convert-keys)
           options (extract-overview-option msg)]
       (try
         {:value (with-out-str
@@ -144,14 +160,14 @@
         :requires {"keys" "Keys to fetch tapped values."}
         :optional {}
         :returns {"children" "The fetched value."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-fetch-tapped-children
   [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))]
+                  convert-keys)]
       (try
         {:children (-> @tapped (get-in* ks) extract-children)}
         (catch Exception ex
@@ -161,14 +177,14 @@
         :requires {"keys" "Keys to browse tapped values."}
         :optional {}
         :returns {"complete" "Completion results."
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-complete-tapped
   [msg]
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))]
+                  convert-keys)]
       (try
         {:complete (-> @tapped
                        (get-in* ks)
@@ -180,7 +196,7 @@
         :requires {}
         :optional {}
         :returns {"result" "OK"
-                  "error" "If occured."
+                  "error" "If occurred."
                   "status" "done"}}
   iced-clear-tapped
   [_]
@@ -188,4 +204,20 @@
     {:error tap-not-supported-msg}
     (do (reset! tapped [])
         {:result "OK"})))
-; vim:fdm=marker:fdl=0
+
+(defn ^{:doc "Delete the specified tapped value."
+        :requires {"key" "The key you'd like to delete"}
+        :optional {}
+        :returns {"result" "OK"
+                  "error" "If occurred."
+                  "status" "done"}}
+  iced-delete-tapped
+  [{target-key :key}]
+  (if-not supported?
+    {:error tap-not-supported-msg}
+    (do (reset! tapped
+                (if (integer? target-key)
+                  (vec (concat (take target-key @tapped)
+                               (drop (inc target-key) @tapped)))
+                  (vec (remove #(= target-key (:unique-id %)) @tapped))))
+        {:result "OK"})))
