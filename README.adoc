@@ -75,13 +75,13 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 |
 | `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
 | `:tapped`, `:error` (if errored)
-|
+| `:tapped` is a map containing `:unique-id` and `:value` keys.
 
 | iced-browse-tapped
 | `keys`
 | `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
 | `:value`, `:error` (if errored)
-|
+| The first element of `keys` must be one of index number or unique-id.
 
 | iced-fetch-tapped-children
 | `keys`
@@ -94,6 +94,12 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 | `:max-depth`, `:max-list-length`, `:max-vector-length`, `:max-set-length`, `:max-string-length`
 | `:complete`, `:error` (if errored)
 |
+
+| iced-delete-tapped
+| `key`
+|
+| `:result`, `:error` (if errored)
+| `key` must be one of index number or unique-id.
 
 | iced-clear-tapped
 |
