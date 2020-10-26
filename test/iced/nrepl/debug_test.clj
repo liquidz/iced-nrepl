@@ -3,7 +3,9 @@
    [clojure.string :as str]
    [clojure.test :as t]
    [iced.nrepl.debug :as sut]
-   [iced.test-helper :as h]))
+   [iced.test-helper :as h])
+  (:import
+   java.util.UUID))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -26,11 +28,14 @@
           tapped (get resp :tapped [])]
       (t/is (contains? (:status resp) "done"))
       (t/is (= 4 (count tapped)))
+      (t/testing "id must be a uuid"
+        (t/is (every? uuid?  (map (comp #(UUID/fromString %) :unique-id) tapped))))
+
       (t/is (= ["1"
                 "hello"
                 "[\"foo\" \"bar\" ...]"
                 "{:foo 1, :bar {:baz \"abc...\"}}"]
-               tapped)))
+               (map :value tapped))))
 
     (h/message {:op "iced-clear-tapped"})
     (let [resp (h/message {:op "iced-list-tapped"})]
@@ -83,6 +88,21 @@
                              :max-string-length 2})]
         (t/is (contains? (:status resp) "done"))
         (t/is (= "\"null\""
+                 (str/trim (str/join "" (:value resp)))))))
+
+    (t/testing "unique-id"
+      (let [uniq-id (-> @@#'sut/tapped first :unique-id)
+            resp (h/message {:op "iced-browse-tapped" :keys [uniq-id]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "{:foo [:bar ...]}"
+                 (str/trim (str/join "" (:value resp))))))
+
+      (let [uniq-id (-> @@#'sut/tapped first :unique-id)
+            resp (h/message {:op "iced-browse-tapped" :keys [uniq-id ":foo"]
+                             :max-string-length 2})]
+        (t/is (contains? (:status resp) "done"))
+        (t/is (= "[:bar {:baz {:hello \"ab...\", etc ...}} {true \"bo...\", etc ...}]"
                  (str/trim (str/join "" (:value resp)))))))))
 
 (defn- test-browse-tapped

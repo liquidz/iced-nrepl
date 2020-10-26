@@ -20,7 +20,8 @@
 
 (defn- catch-tapped!
   [x]
-  (and datafy' (swap! tapped conj (datafy' x))))
+  (and datafy' (swap! tapped conj {:unique-id (str (java.util.UUID/randomUUID))
+                                   :content (datafy' x)})))
 
 (when supported?
   (remove-tap' #'catch-tapped!)
@@ -50,6 +51,18 @@
     (str/replace k #"(^\"|\"$)" "")
 
     :else k))
+
+(defn- convert-keys
+  [[first-key & rest-keys]]
+  ;; First key must be index(Integer) or unique-id(String)
+  (let [index (if (integer? first-key)
+                first-key
+                (reduce (fn [idx item]
+                          (if (= first-key (:unique-id item))
+                            (reduced idx)
+                            (inc idx)))
+                        0 @tapped))]
+    (concat [index :content] (map convert-key rest-keys))))
 
 (defn parse-option-string
   [s]
@@ -105,7 +118,10 @@
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [option (extract-overview-option msg)]
-      {:tapped (map #(str (i.u.overview/overview % option)) @tapped)})))
+      {:tapped (map (fn [{:keys [unique-id content]}]
+                      {:unique-id unique-id
+                       :value (str (i.u.overview/overview content option))})
+                    @tapped)})))
 
 (defn ^{:doc "Browses tapped values and returns the value."
         :requires {"keys" "Keys to browse tapped values."}
@@ -118,7 +134,7 @@
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))
+                  convert-keys)
           options (extract-overview-option msg)]
       (try
         {:value (with-out-str
@@ -151,7 +167,7 @@
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))]
+                  convert-keys)]
       (try
         {:children (-> @tapped (get-in* ks) extract-children)}
         (catch Exception ex
@@ -168,7 +184,7 @@
   (if-not supported?
     {:error tap-not-supported-msg}
     (let [ks (->> (get msg :keys [])
-                  (map convert-key))]
+                  convert-keys)]
       (try
         {:complete (-> @tapped
                        (get-in* ks)
