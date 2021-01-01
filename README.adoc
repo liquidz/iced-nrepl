@@ -111,7 +111,7 @@ If `:overwrite?` is If logical true, `cljfmt.core/default-indents` will not be u
 
 == License
 
-Copyright © 2018-2020 https://twitter.com/uochan[Masashi Iizuka]
+Copyright © 2018-2021 https://twitter.com/uochan[Masashi Iizuka]
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
