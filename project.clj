@@ -10,7 +10,7 @@
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "1.1.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
-                 ^:inline-dep [cider/orchard "0.6.1"]
+                 ^:inline-dep [cider/orchard "0.6.2"]
                  ;; TODO cljfmt 0.7.0 seems to be failed
                  ^:inline-dep [cljfmt "0.6.8"
                                :exclusions [org.clojure/clojure
@@ -19,7 +19,7 @@
                  ^:inline-dep [medley "1.3.0"
                                :exclusions [org.clojure/clojure]]]
 
-  :plugins [[thomasa/mranderson "0.5.1"]
+  :plugins [[thomasa/mranderson "0.5.2"]
             [lein-cloverage "1.2.1"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 

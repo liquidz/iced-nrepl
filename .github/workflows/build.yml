@@ -4,20 +4,17 @@ jobs:
   build:
     strategy:
       matrix:
-        jdk_version: [8, 11, 13, 14]
+        java: ['8', '11', '13', '14']
     runs-on: ubuntu-latest
-    container:
-      image: clojure:openjdk-${{ matrix.jdk_version }}-lein
     steps:
       - uses: actions/checkout@v2
-      - name: Cache m2
-        uses: actions/cache@v2
+      - uses: actions/setup-java@v1
         with:
-          path: /root/.m2
-          key: root-m2-${{ hashFiles('project.clj') }}
+          java-version: ${{ matrix.java }}
+      - run: java -version
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: build-m2-${{ hashFiles('project.clj') }}
       - name: Run tests
-        run: |
-          apt update
-          apt install -y make
-          make deps
-          make test
+        run: make test
