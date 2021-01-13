@@ -1,5 +1,8 @@
 (ns iced.nrepl.namespace
   (:require
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [clojure.set :as set]
    [clojure.string :as str]
    [orchard.namespace :as o.ns]))
 
@@ -85,3 +88,54 @@
     {:path (or (ns-path (symbol ns-name))
                (pseudo-ns-path ns-name)
                (default-ns-path ns-name))}))
+
+(def ^:private java-classes*
+  (-> "java_classes.edn"
+      (io/resource)
+      (slurp)
+      (edn/read-string)))
+
+(defn- convert-class-map
+  [class-map]
+  (reduce-kv
+   (fn [accm k v]
+     (assoc accm (keyword k) (set (map symbol v))))
+   {}
+   class-map))
+
+(defn- java-class
+  [additional-class-map]
+  (if additional-class-map
+    (merge-with set/union
+                java-classes*
+                (convert-class-map additional-class-map))
+    java-classes*))
+
+(defn- candidates
+  [class-name classes]
+  (let [sym (symbol class-name)]
+    (reduce-kv
+     (fn [res pkg class-set]
+       (if (contains? class-set sym)
+         (conj res (str (name pkg) "." sym))
+         res))
+     [] classes)))
+
+(defn ^{:doc "Returns java class candidates."
+        :requires {"symbol" "Symbol to find candidates."}
+        :optional {"class-map" "Optional map of package name to class name."}
+        :returns {"candidates" "Java class candidates."
+                  "error" "Error message if occured."
+                  "status" "done"}}
+  iced-java-class-candidates
+  [msg]
+  (try
+    (let [classes (java-class (:class-map msg))]
+      (if-let [result (some-> (:symbol msg)
+                              (str/split #"/" 2)
+                              (first)
+                              (candidates classes))]
+        {:candidates result}
+        {:status #{:done :failed} :error "Not found"}))
+    (catch Exception ex
+      {:status #{:done :failed} :error (.getMessage ex)})))
