@@ -1,5 +1,4 @@
-{
- :linters {:unresolved-symbol
+{:linters {:unresolved-symbol
            {:exclude [(clojure.test/is [compatible])
                       set-descriptor!]}
 
@@ -15,5 +14,4 @@
            {:level :error}}
 
  :output {:exclude-files
-          ["src/iced/nrepl/transport.clj"]}
- }
+          ["src/iced/nrepl/transport.clj"]}}
