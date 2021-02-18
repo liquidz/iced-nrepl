@@ -1,6 +1,6 @@
 .PHONY: deps repl coverage test dev-test install dev-install release deploy outdated clean
 
-VERSION := 1.10.1
+VERSION := 1.10.2
 
 .inline-deps:
 	lein inline-deps
