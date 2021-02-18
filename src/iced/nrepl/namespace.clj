@@ -125,7 +125,7 @@
         :requires {"symbol" "Symbol to find candidates."}
         :optional {"class-map" "Optional map of package name to class name."}
         :returns {"candidates" "Java class candidates."
-                  "error" "Error message if occured."
+                  "error" "Error message if occurred"
                   "status" "done"}}
   iced-java-class-candidates
   [msg]
