@@ -18,7 +18,7 @@
                  ^:inline-dep [medley "1.3.0"
                                :exclusions [org.clojure/clojure]]]
 
-  :plugins [[thomasa/mranderson "0.5.3-SNAPSHOT"]
+  :plugins [[thomasa/mranderson "0.5.3"]
             [lein-cloverage "1.2.2"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
