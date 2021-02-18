@@ -83,7 +83,7 @@
         :requires {"code" "Code to rewrite."}
         :optional {}
         :returns {"code" "Rewritten code."
-                  "error" "Error message if occured."
+                  "error" "Error message if occurred"
                   "status" "done"}}
   iced-refactor-thread-first
   [msg]
@@ -96,7 +96,7 @@
         :requires {"code" "Code to rewrite."}
         :optional {}
         :returns {"code" "Rewritten code."
-                  "error" "Error message if occured."
+                  "error" "Error message if occurred"
                   "status" "done"}}
   iced-refactor-thread-last
   [msg]

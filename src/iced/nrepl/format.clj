@@ -84,9 +84,9 @@
                    "alias-map" "Namespace alias map."}
         :optional {}
         :returns {"formatted" "Formatted code."
-                  "error" "Error message if occured."
-                  "line" "Error line number if occured."
-                  "column" "Error column number if occured."
+                  "error" "Error message if occurred"
+                  "line" "Error line number if occurred"
+                  "column" "Error column number if occurred"
                   "status" "done"}}
   iced-format-code-with-indents
   [msg]
@@ -99,9 +99,9 @@
                    "alias-map" "Namespace alias map."}
         :optional {}
         :returns {"indent-level" "Calculated indentation level."
-                  "error" "Error message if occured."
-                  "line" "Error line number if occured."
-                  "column" "Error column number if occured."
+                  "error" "Error message if occurred"
+                  "line" "Error line number if occurred"
+                  "column" "Error column number if occurred"
                   "status" "done"}}
   iced-calculate-indent-level
   [msg]

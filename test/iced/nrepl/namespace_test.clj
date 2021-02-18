@@ -51,3 +51,40 @@
   (with-redefs [o.ns/project-namespaces (constantly '[foo.bar barbaz])]
     (t/is (str/ends-with? (:path (sut/iced-pseudo-ns-path {:ns "foo.baz"}))
                           "foo/baz.clj"))))
+
+(t/deftest java-class-candidates-test
+  (t/testing "single candidate"
+    (let [resp (h/message {:op "iced-java-class-candidates"
+                           :symbol "UUID"})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= ["java.util.UUID"] (:candidates resp)))))
+
+  (t/testing "no candidates"
+    (let [resp (h/message {:op "iced-java-class-candidates"
+                           :symbol "NonExisting"})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= [] (:candidates resp)))))
+
+  (t/testing "invalid message"
+    (let [resp (h/message {:op "iced-java-class-candidates"})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (contains? (:status resp) "failed"))
+      (t/is (some? (:error resp)))))
+
+  (t/testing "additional class-map"
+    (let [resp (h/message {:op "iced-java-class-candidates"
+                           :symbol "IcedTestClass"
+                           :class-map {"iced.nrepl.namespace-test" ["IcedTestClass"]}})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= ["iced.nrepl.namespace-test.IcedTestClass"]
+               (:candidates resp)))))
+
+  (t/testing "multiple candidates"
+    (let [resp (h/message {:op "iced-java-class-candidates"
+                           :symbol "SameNameClass"
+                           :class-map {"iced.nrepl.namespace-test.foo" ["SameNameClass"]
+                                       "iced.nrepl.namespace-test.bar" ["SameNameClass"]}})]
+      (t/is (contains? (:status resp) "done"))
+      (t/is (= #{"iced.nrepl.namespace-test.foo.SameNameClass"
+                 "iced.nrepl.namespace-test.bar.SameNameClass"}
+               (set (:candidates resp)))))))

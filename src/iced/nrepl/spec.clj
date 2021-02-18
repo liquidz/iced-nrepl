@@ -52,8 +52,8 @@
         :optional {}
         :returns {"result" "'OK' or 'NG'."
                   "num-tests" "Actual number of tests."
-                  "error" "Error message if occured."
-                  "failed-input" "The input when error occured."
+                  "error" "Error message if occurred"
+                  "failed-input" "The input when error occurred"
                   "status" "done"}}
   iced-spec-check
   [msg]

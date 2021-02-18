@@ -1,4 +1,4 @@
-(defproject iced-nrepl "1.1.3-SNAPSHOT"
+(defproject iced-nrepl "1.2.0-SNAPSHOT"
   :description "nREPL middleware for vim-iced"
   :url "https://github.com/liquidz/iced-nrepl"
   :license {:name "Eclipse Public License"
@@ -11,16 +11,15 @@
                  ^:inline-dep [org.clojure/tools.namespace "1.1.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.6.2"]
-                 ;; TODO cljfmt 0.7.0 seems to be failed
-                 ^:inline-dep [cljfmt "0.6.8"
+                 ^:inline-dep [cljfmt "0.7.0"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
                  ^:inline-dep [medley "1.3.0"
                                :exclusions [org.clojure/clojure]]]
 
-  :plugins [[thomasa/mranderson "0.5.2"]
-            [lein-cloverage "1.2.1"]]
+  :plugins [[thomasa/mranderson "0.5.3"]
+            [lein-cloverage "1.2.2"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles
@@ -28,9 +27,9 @@
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]
-   :1.10.1 [:dev {:dependencies [[org.clojure/clojure "1.10.1"]]}]
+   :1.10.2 [:dev {:dependencies [[org.clojure/clojure "1.10.2"]]}]
 
-   :release {:dependencies [[org.clojure/clojure "1.10.1"]]}
+   :release {:dependencies [[org.clojure/clojure "1.10.2"]]}
    :antq {:dependencies [[antq "RELEASE"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
@@ -41,4 +40,4 @@
                   ["vcs" "commit"]
                   ["vcs" "push"]]
 
-  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.1" "test"]]})
+  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.2" "test"]]})

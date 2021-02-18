@@ -34,6 +34,7 @@
          format/iced-calculate-indent-level
          format/iced-format-code-with-indents
          format/iced-set-indentation-rules
+         namespace/iced-java-class-candidates
          namespace/iced-project-ns-list
          namespace/iced-pseudo-ns-path
          refactor.thread/iced-refactor-thread-first
