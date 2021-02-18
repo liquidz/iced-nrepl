@@ -27,7 +27,7 @@
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.0"]]}]
-   :1.10.2 [:dev {:dependencies [[org.clojure/clojure "1.10.2"]]} ]
+   :1.10.2 [:dev {:dependencies [[org.clojure/clojure "1.10.2"]]}]
 
    :release {:dependencies [[org.clojure/clojure "1.10.2"]]}
    :antq {:dependencies [[antq "RELEASE"]]}}
