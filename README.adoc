@@ -7,7 +7,7 @@ image:https://github.com/liquidz/iced-nrepl/workflows/build/badge.svg["GitHub Ac
 image:https://github.com/liquidz/iced-nrepl/workflows/lint/badge.svg["GitHub Actions for lint workflow", link="https://github.com/liquidz/iced-nrepl/actions?query=workflow%3Alint"]
 image:https://github.com/liquidz/iced-nrepl/workflows/dependencies/badge.svg["GitHub Actions for dependencies workflow", link="https://github.com/liquidz/iced-nrepl/actions?query=workflow%3Adependencies"]
 image:https://codecov.io/gh/liquidz/iced-nrepl/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/liquidz/iced-nrepl"]
-image:https://img.shields.io/clojars/v/iced-nrepl.svg["Clojars Project", link="https://clojars.org/iced-nrepl"]
+image:https://img.shields.io/clojars/v/com.github.liquidz/iced-nrepl.svg["Clojars Project", link="https://clojars.org/com.github.liquidz/iced-nrepl"]
 
 == Ops
 
