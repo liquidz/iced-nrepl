@@ -30,7 +30,7 @@
    :1.10.3 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
 
    :release {:dependencies [[org.clojure/clojure "1.10.3"]]}
-   :antq {:dependencies [[antq "RELEASE"]]}}
+   :antq {:dependencies [[com.github.liquidz/antq "RELEASE"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
