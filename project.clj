@@ -4,13 +4,13 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[nrepl "0.8.3"]
-                 ^:inline-dep [org.clojure/data.json "2.2.1"
+                 ^:inline-dep [org.clojure/data.json "2.2.3"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/test.check "1.1.0"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "1.1.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
-                 ^:inline-dep [cider/orchard "0.7.0"]
+                 ^:inline-dep [cider/orchard "0.7.1"]
                  ^:inline-dep [cljfmt "0.7.0"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
