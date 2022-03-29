@@ -27,7 +27,7 @@
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
-   :1.10.3 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
+   :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.0"]]}]
 
    :release {:dependencies [[org.clojure/clojure "1.10.3"]]}
    :antq {:dependencies [[com.github.liquidz/antq "RELEASE"]]}}
@@ -40,4 +40,4 @@
                   ["vcs" "commit"]
                   ["vcs" "push"]]
 
-  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.10.3" "test"]]})
+  :aliases {"test-all" ["do" ["with-profile" "1.9:1.10:1.11" "test"]]})
