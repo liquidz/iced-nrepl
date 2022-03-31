@@ -29,7 +29,7 @@
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
    :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.0"]]}]
 
-   :release {:dependencies [[org.clojure/clojure "1.10.3"]]}
+   :release {:dependencies [[org.clojure/clojure "1.11.0"]]}
    :antq {:dependencies [[com.github.liquidz/antq "RELEASE"]]}}
 
   :release-tasks [["vcs" "assert-committed"]
