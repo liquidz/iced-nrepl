@@ -15,7 +15,7 @@
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
-                 ^:inline-dep [medley "1.3.0"
+                 ^:inline-dep [medley "1.4.0"
                                :exclusions [org.clojure/clojure]]]
 
   :plugins [[thomasa/mranderson "0.5.3"]
