@@ -27,10 +27,12 @@
          :global-vars {*warn-on-reflection* true}}
    :1.9 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
-   :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.0"]]}]
+   :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.1"]]}]
 
-   :release {:dependencies [[org.clojure/clojure "1.11.0"]]}
+   :release {:dependencies [[org.clojure/clojure "1.11.1"]]}
    :antq {:dependencies [[com.github.liquidz/antq "RELEASE"]]}}
+
+  :deploy-repositories [["clojars" {:sign-releases false :url "https://clojars.org/repo"}]]
 
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
