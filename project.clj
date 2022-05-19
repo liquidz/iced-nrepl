@@ -25,7 +25,7 @@
   :profiles
   {:dev {:source-paths ["src" "test_files"]
          :global-vars {*warn-on-reflection* true}}
-   :1.9 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
+   :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
    :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.1"]]}]
 
