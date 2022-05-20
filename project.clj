@@ -8,7 +8,7 @@
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/test.check "1.1.1"
                                :exclusions [org.clojure/clojure]]
-                 ^:inline-dep [org.clojure/tools.namespace "1.2.0" ; required by cljfmt
+                 ^:inline-dep [org.clojure/tools.namespace "1.3.0" ; required by cljfmt
                                :exclusions [org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.9.2"]
                  ^:inline-dep [cljfmt "0.8.0"
@@ -25,7 +25,7 @@
   :profiles
   {:dev {:source-paths ["src" "test_files"]
          :global-vars {*warn-on-reflection* true}}
-   :1.9 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
+   :1.9 [:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}]
    :1.10 [:dev {:dependencies [[org.clojure/clojure "1.10.3"]]}]
    :1.11 [:dev {:dependencies [[org.clojure/clojure "1.11.1"]]}]
 
