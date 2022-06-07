@@ -9,7 +9,8 @@
                  ^:inline-dep [org.clojure/test.check "1.1.1"
                                :exclusions [org.clojure/clojure]]
                  ^:inline-dep [org.clojure/tools.namespace "1.3.0" ; required by cljfmt
-                               :exclusions [org.clojure/java.classpath]]
+                               :exclusions [org.clojure/clojure
+                                            org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.9.2"]
                  ^:inline-dep [cljfmt "0.8.0"
                                :exclusions [org.clojure/clojure
@@ -19,7 +20,7 @@
                                :exclusions [org.clojure/clojure]]]
 
   :plugins [[thomasa/mranderson "0.5.3"]
-            [lein-cloverage "1.2.3"]]
+            [lein-cloverage "1.2.4"]]
   :mranderson {:project-prefix "mrandersonicednrepl"}
 
   :profiles

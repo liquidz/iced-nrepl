@@ -37,9 +37,10 @@
     {:error s}))
 
 (defn format-code
-  [code-str alias-map]
-  (let [option {:indents @indentation-rules
-                :alias-map (medley/map-keys keyword->string alias-map)}]
+  [code-str alias-map extra-config]
+  (let [option (merge extra-config
+                      {:indents @indentation-rules
+                       :alias-map (medley/map-keys keyword->string alias-map)})]
     (try
       {:formatted (fmt/reformat-string code-str option)}
       (catch Exception ex
@@ -82,7 +83,7 @@
 (defn ^{:doc "Formats codes by rules which is set by `iced-set-indentation-rules` op."
         :requires {"code" "Code to format."
                    "alias-map" "Namespace alias map."}
-        :optional {}
+        :optional {"extra-config" "Extra configuration map for cljfmt."}
         :returns {"formatted" "Formatted code."
                   "error" "Error message if occurred"
                   "line" "Error line number if occurred"
@@ -90,8 +91,13 @@
                   "status" "done"}}
   iced-format-code-with-indents
   [msg]
-  (let [{:keys [code alias-map]} msg]
-    (format-code code alias-map)))
+  (let [{:keys [code alias-map extra-config]} msg
+        extra-config (medley/map-kv (fn [k v]
+                                      (if (str/ends-with? (name k) "?")
+                                        [k (= 1 v)]
+                                        [k v]))
+                                    extra-config)]
+    (format-code code alias-map extra-config)))
 
 (defn ^{:doc "Returns the indentation level."
         :requires {"code" "Code to calculate indentation level."

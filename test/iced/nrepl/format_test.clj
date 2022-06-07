@@ -71,6 +71,16 @@
     "(b/baz 1 2\n3)",   {},          "(b/baz 1 2\n       3)"
     "(b/baz 1 2\n3)",   {"b" "bar"}, "(b/baz 1 2\n  3)"))
 
+(t/deftest code-extra-config-test
+  (sut/set-indentation-rules! test-indentation-rules nil)
+  (t/are [code extra-config expected]
+         (= expected (:formatted (h/message {:op "iced-format-code-with-indents"
+                                             :code code
+                                             :alias-map {}
+                                             :extra-config extra-config})))
+    "{:a 1    :b 2}" {"remove-multiple-non-indenting-spaces?" 1} "{:a 1 :b 2}"
+    "(  foo  )" {"remove-surrounding-whitespace?" 0} "(  foo  )"))
+
 (t/deftest code-error-test
   (let [resp (h/message {:op "iced-format-code-with-indents"
                          :code "(hello (world)"
