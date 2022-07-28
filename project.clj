@@ -12,7 +12,7 @@
                                :exclusions [org.clojure/clojure
                                             org.clojure/java.classpath]]
                  ^:inline-dep [cider/orchard "0.9.2"]
-                 ^:inline-dep [cljfmt "0.8.0"
+                 ^:inline-dep [cljfmt "0.8.2"
                                :exclusions [org.clojure/clojure
                                             org.clojure/clojurescript
                                             org.clojure/tools.reader]]
