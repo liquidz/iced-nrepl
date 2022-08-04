@@ -3,8 +3,7 @@
    [clojure.string :as str]
    [clojure.test :as t]
    [iced.nrepl.format :as sut]
-   [iced.test-helper :as h]
-   [medley.core :as medley]))
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -19,6 +18,12 @@
   (and (every? #(instance? java.util.regex.Pattern %) regexps)
        (apply = (map str regexps))))
 
+(defn- find-first
+  [pred coll]
+  (some #(and (pred %)
+              %)
+        coll))
+
 (t/deftest set-indentation-rules!-test
   (sut/set-indentation-rules! {} 1)
   (t/is (empty? @(deref #'sut/indentation-rules)))
@@ -32,7 +37,7 @@
     (t/is (= [[:block 1]] (get rules 'foo)))
     (t/is (= [[:block 2] [:inner 1]] (get rules 'bar/baz)))
 
-    (let [[_ v] (medley/find-first #(reg= #"^icedtest" (first %)) rules)]
+    (let [[_ v] (find-first #(reg= #"^icedtest" (first %)) rules)]
       (t/is (= [[:inner 0]] v)))))
 
 (t/deftest set-indentation-ruled!-with-overwrite-test

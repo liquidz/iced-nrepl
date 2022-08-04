@@ -3,8 +3,7 @@
    [clojure.string :as str]
    [clojure.test :as t]
    [iced.nrepl.namespace :as sut]
-   [iced.test-helper :as h]
-   [orchard.namespace :as o.ns]))
+   [iced.test-helper :as h]))
 
 (t/use-fixtures :once h/repl-server-fixture)
 
@@ -48,9 +47,8 @@
                             "/test/nonexisting/foo/bar_test.clj")))))
 
 (t/deftest pseudo-ns-path-error-test
-  (with-redefs [o.ns/project-namespaces (constantly '[foo.bar barbaz])]
-    (t/is (str/ends-with? (:path (sut/iced-pseudo-ns-path {:ns "foo.baz"}))
-                          "foo/baz.clj"))))
+  (t/is (str/ends-with? (:path (sut/iced-pseudo-ns-path {:ns "foo.baz"}))
+                        "foo/baz.clj")))
 
 (t/deftest java-class-candidates-test
   (t/testing "single candidate"
