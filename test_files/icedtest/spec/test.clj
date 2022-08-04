@@ -1,19 +1,19 @@
 (ns icedtest.spec.test
   (:require
-   [clojure.spec.alpha :as s]))
+   [clojure.spec.alpha :as spec]))
 
 (defn success-func
   [_]
   true)
-(s/fdef success-func
-        :args (s/cat :_ any?)
+(spec/fdef success-func
+        :args (spec/cat :_ any?)
         :ret boolean?)
 
 (defn fail-func
   [_]
   true)
-(s/fdef fail-func
-        :args (s/cat :_ boolean?)
+(spec/fdef fail-func
+        :args (spec/cat :_ boolean?)
         :ret string?)
 
 (defn no-spec-func
