@@ -6,15 +6,15 @@
   [_]
   true)
 (spec/fdef success-func
-        :args (spec/cat :_ any?)
-        :ret boolean?)
+           :args (spec/cat :_ any?)
+           :ret boolean?)
 
 (defn fail-func
   [_]
   true)
 (spec/fdef fail-func
-        :args (spec/cat :_ boolean?)
-        :ret string?)
+           :args (spec/cat :_ boolean?)
+           :ret string?)
 
 (defn no-spec-func
   []
