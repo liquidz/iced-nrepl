@@ -17,3 +17,4 @@ pom.xml.asc
 .eastwood
 /.clj-kondo/.cache
 **/.lsp
+.cpcache

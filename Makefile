@@ -1,53 +1,46 @@
-VERSION := 1.11
-
 .inline-deps:
-	lein inline-deps
+	clojure -T:build inline-deps
 	touch .inline-deps
 
-.PHONY: deps
-deps: .inline-deps
+.PHONY: inline-deps
+inline-deps: clean .inline-deps
 
 .PHONY: repl
 repl:
-	iced repl --without-cljs with-profile $(VERSION)
+	iced repl --without-cljs --force-clojure-cli -A:dev:injection
 
 .PHONY: lint
 lint:
 	clj-kondo --lint src:test
+	cljstyle check
 
-.PHONY: coverage
-coverage:
-	lein with-profile +$(VERSION) cloverage \
-	    --codecov \
-	    --ns-exclude-regex 'icedtest\..*'
 
 .PHONY: test
 test: .inline-deps
-	lein with-profile +plugin.mranderson/config test-all
+	clojure -M:dev:srcdeps:test
+	clojure -M:dev:1.9:srcdeps:test
+	clojure -M:dev:1.10:srcdeps:test
+
 .PHONY: dev-test
 dev-test:
-	lein with-profile +$(VERSION) test
+	clojure -M:dev:injection:test
 
 .PHONY: install
 install: .inline-deps
-	lein with-profile +release,+plugin.mranderson/config install
-.PHONY: dev-install
-dev-install:
-	lein with-profile +release install
+	clojure -T:build install
 
-.PHONY: release
-release:
-	lein with-profile +release release
-
-.PHONY: deploy
-deploy: .inline-deps
-	lein with-profile +release,+plugin.mranderson/config deploy clojars
+.PHONY: coverage
+coverage:
+	clojure -M:dev:injection:coverage \
+		--src-ns-path=src \
+		--test-ns-path=test  \
+		--codecov \
+		--ns-exclude-regex 'icedtest\..*'
 
 .PHONY: outdated
 outdated:
-	lein with-profile +antq run -m antq.core --upgrade
+	clojure -M:outdated --upgrade
 
 .PHONY: clean
 clean:
-	lein clean
-	\rm -f .inline-deps
+	\rm -rf target .inline-deps .cpcache
