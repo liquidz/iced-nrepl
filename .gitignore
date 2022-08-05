@@ -7,7 +7,6 @@ pom.xml
 pom.xml.asc
 *.jar
 *.class
-/.lein-*
 /.nrepl-port
 .hgignore
 .hg/
@@ -17,3 +16,4 @@ pom.xml.asc
 .eastwood
 /.clj-kondo/.cache
 **/.lsp
+.cpcache

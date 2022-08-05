@@ -1,10 +1,12 @@
-(ns iced.nrepl.core)
+(ns iced.nrepl.core
+  (:require
+   [clojure.java.io :as io]))
 
 (defn version
   []
-  (-> (slurp "project.clj")
-      read-string
-      (nth 2)))
+  (-> "version.txt"
+      (io/resource)
+      (slurp)))
 
 (defn ^{:doc "Returns the version of iced-nrepl middleware."
         :requires {}

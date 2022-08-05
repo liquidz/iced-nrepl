@@ -229,7 +229,8 @@
       (t/is (= [] (:complete resp))))))
 
 (t/deftest not-supported-test
-  (when-not sut/supported?
+  (if sut/supported?
+    (t/is true)
     (doseq [op ["iced-list-tapped"
                 "iced-clear-tapped"
                 "iced-browse-tapped"
