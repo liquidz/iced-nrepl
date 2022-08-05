@@ -5,10 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: DeLaGuardo/setup-clojure@master
+        with:
+          cli: latest
       - uses: actions/cache@v3
         with:
           path: ~/.m2
-          key: v1-m2-${{ hashFiles('project.clj') }}
+          key: clojure-m2-${{ hashFiles('deps.edn') }}
       - name: Run cloverage
         env:
             CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

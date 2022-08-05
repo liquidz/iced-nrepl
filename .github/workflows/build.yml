@@ -12,10 +12,15 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: ${{ matrix.java }}
-      - run: java -version
+      - uses: DeLaGuardo/setup-clojure@master
+        with:
+          cli: latest
+      - run: |
+          java -version
+          clojure --version
       - uses: actions/cache@v3
         with:
           path: ~/.m2
-          key: build-m2-${{ hashFiles('project.clj') }}
+          key: clojure-m2-${{ hashFiles('deps.edn') }}
       - name: Run tests
         run: make test
