@@ -28,6 +28,7 @@ jobs:
           path: ~/.m2
           key: clojure-m2-${{ hashFiles('deps.edn') }}
       - name: Update and commit version file
+        if: ${{ ! inputs.snapshot }}
         id: document
         run: |
           clojure -T:build update-documents
@@ -65,7 +66,9 @@ jobs:
 
       - name: deploy to clojars
         id: deploy
-        run: clojure -T:build deploy
+        run: |
+          make inline-deps
+          clojure -T:build deploy
         env:
           CLOJARS_PASSWORD: ${{secrets.CLOJARS_PASSWORD}}
           CLOJARS_USERNAME: ${{secrets.CLOJARS_USERNAME}}
