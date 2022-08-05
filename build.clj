@@ -8,7 +8,7 @@
 
 (def ^:private build-config
   {:lib 'com.github.liquidz/iced-nrepl
-   :version "1.2.{{git/commit-count}}-SNAPSHOT"
+   :version "1.2.{{git/commit-count}}"
    :description "nREPL middleware for vim-iced"
    :documents [{:file "resources/version.txt"
                 :action :create
@@ -108,15 +108,15 @@
 (defn install
   [m]
   (-> (merge (inlined-build-config)
-             m
-             {:version (fixed-version)})
+             {:version (fixed-version)}
+             m)
       (build-edn/install)))
 
 (defn deploy
   [m]
   (-> (merge (inlined-build-config)
-             m
-             {:version (fixed-version)})
+             {:version (fixed-version)}
+             m)
       (build-edn/deploy)))
 
 (defn update-documents
