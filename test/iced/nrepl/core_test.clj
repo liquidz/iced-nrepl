@@ -3,6 +3,8 @@
    [clojure.test :as t]
    [iced.test-helper :as h]))
 
+(println "Clojure version:" (clojure-version))
+
 (t/use-fixtures :once h/repl-server-fixture)
 
 (t/deftest version-test
