@@ -46,6 +46,11 @@
                   (conj :exclusions (:exclusions v)))
                 {:inline-dep true})))))
 
+(defn- fixed-version
+  []
+  (-> (io/resource "version.txt")
+      (slurp)))
+
 (defn- mranderson-context
   [srcdeps-relative]
   (let [project-source-dirs (->> (io/file srcdeps-relative)
@@ -53,8 +58,7 @@
                                  (filter #(.isDirectory %)))
         pname (name (:lib build-config))
         pprefix (str "mranderson" (str/replace pname #"-" ""))
-        version (-> (io/resource "version.txt")
-                    (slurp))]
+        version (fixed-version)]
     {:pname pname
      :pversion version
      :pprefix pprefix
@@ -103,5 +107,19 @@
 
 (defn install
   [m]
-  (-> (merge (inlined-build-config) m)
+  (-> (merge (inlined-build-config)
+             m
+             {:version (fixed-version)})
       (build-edn/install)))
+
+(defn deploy
+  [m]
+  (-> (merge (inlined-build-config)
+             m
+             {:version (fixed-version)})
+      (build-edn/deploy)))
+
+(defn update-documents
+  [m]
+  (-> (merge (inlined-build-config) m)
+      (build-edn/update-documents)))
