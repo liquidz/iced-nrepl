@@ -1,5 +1,5 @@
 {:paths ["src" "resources"]
- :deps {nrepl/nrepl {:mvn/version "0.9.0"}}
+ :deps {nrepl/nrepl {:mvn/version "1.0.0"}}
  :aliases
  {:dev {:extra-paths ["test" "test_files"]
         :extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
