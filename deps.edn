@@ -1,5 +1,5 @@
 {:paths ["src" "resources"]
- :deps {nrepl/nrepl {:mvn/version "0.9.0"}}
+ :deps {nrepl/nrepl {:mvn/version "1.0.0"}}
  :aliases
  {:dev {:extra-paths ["test" "test_files"]
         :extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
@@ -41,7 +41,7 @@
 
   :build {:extra-paths ["resources"]
           :deps {com.github.liquidz/build.edn {:git/tag "0.7.145" :git/sha "776501e"}
-                 leiningen/leiningen {:mvn/version "2.9.9"} ; required by mranderson
+                 leiningen/leiningen {:mvn/version "2.9.10"} ; required by mranderson
                  thomasa/mranderson {:mvn/version "0.5.3"}}
           :ns-default build}}}
 
