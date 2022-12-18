@@ -41,7 +41,7 @@
 
   :build {:extra-paths ["resources"]
           :deps {com.github.liquidz/build.edn {:git/tag "0.9.188" :git/sha "d2d25b0"}
-                 leiningen/leiningen {:mvn/version "2.9.10"} ; required by mranderson
+                 leiningen/leiningen {:mvn/version "2.10.0"} ; required by mranderson
                  thomasa/mranderson {:mvn/version "0.5.3"}}
           :ns-default build}}}
 
